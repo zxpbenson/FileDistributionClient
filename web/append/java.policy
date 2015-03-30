@@ -1,0 +1,3 @@
+    permission java.security.AllPermission;
+    permission java.util.PropertyPermission "user.dir", "read";
+    permission java.io.FilePermission "<<ALL FILES>>", "read"; 

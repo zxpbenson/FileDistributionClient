@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SFTP Documentation - Configuration</title>
+<meta name="description" content="SFTP configuration parameters" />
+<meta name="keywords" content="setup,applet,sftp,hostname,port,url" />
+<link href="styles/template.css" rel="stylesheet" type="text/css" />
+<link href="styles/doc.css" rel="stylesheet" type="text/css" />
+</style>
+</head>
+<body>
+<div id="containerDiv">
+  <div id="topDiv">
+  <div id="navDiv">
+  <div id="tabsDiv"><ul>
+  <li><a href="http://www.jfileupload.com/index.html" title="Home"><span>Home</span></a></li>
+  <li><a href="http://www.jfileupload.com/products/index.html" title="Products"><span>Products</span></a></li>
+  <li><a href="http://www.jfileupload.com/support/index.html" title="Support"><span>Support</span></a></li>
+  <li><a href="http://www.jfileupload.com/purchase/index.html" title="Purchase"><span>Purchase</span></a></li>
+  <li><a href="http://www.jfileupload.com/about/index.html" title="About"><span>About</span></a></li>
+  </ul></div>
+  <div id="searchDiv"></div>
+  </div>
+  </div>
+  <div id="mainDiv">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="20%" valign="top"><div id="sidebar">
+      <div id="sidebarSection">
+        <ul>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="installation.html" title="Installation"><span>Installation</span></a></li>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="configuration.html" title="Configuration"><span>Configuration</span></a></li>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="faq.html" title="FAQ"><span>FAQ</span></a></li>
+          </ul>
+      </div>
+      <div id="sidebarNav"><br/><br/><a href="index.html" title="Back">&lt;&lt; Back</a></div>
+      </div>    </td>
+    <td width="80%" valign="top"><table width="98%" border="0" cellspacing="1" cellpadding="0" align="center">
+      <tr>
+        <td valign="top"><p align="center" class="mainTitle"><b>-  Parameters -</b></p>
+            <p class="justify"><strong>H</strong>ere is the list and the meaning of the SFTP related parameters. All others parameters such as zip-on-fly, retry on failure, internationalization are availble in JFileUpload documentation. </p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td valign="top" class="sectionTitle"><a name="regular" id="regular"></a>SFTP parameters</td>
+              </tr>
+            </table>
+          <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#CCCCCC"><table width="100%"  border="0" cellpadding="1" cellspacing="1" class="fnt">
+                  <tr bgcolor="#EEEEFF">
+                    <td align="center"><strong>Properties</strong></td>
+                    <td align="center"><strong>Description and sample </strong></td>
+                    </tr>
+                  <tr class="even">
+                    <td align="center">url</td>
+                    <td>This parameter is the full url to your SFTP server. It must start with sftp:// followed by hostname and optionally SFTP port (default is 22). For instance, if your SFTP runs on yourdomain.com with port 8022 then url parameter must be: <br />
+                    &lt;PARAM NAME=&quot;url&quot; VALUE=&quot;sftp://yourdomain.com:8022&quot;&gt;</td>
+                    </tr>
+                  <tr class="odd">
+                    <td align="center">username</td>
+                    <td>This parameter is the SSH login. See security section in <a href="faq.html">FAQ</a> to learn how to hide or encrypt it. This parameter is available as both regular and extra parameter.</td>
+                    </tr>
+                  <tr class="even">
+                    <td align="center">password</td>
+                    <td>This parameter is the SSH password. See security section in <a href="faq.html">FAQ</a> to learn how to hide or encrypt it. This parameter is available as both regular and extra parameter.</td>
+                    </tr>
+                  <tr class="odd">
+                    <td align="center">resume</td>
+                    <td>This parameter allows enabling resume support for upload and downoad transfer. Use &lt;PARAM NAME=&quot;resume&quot; VALUE=&quot;true&quot;&gt;</td>
+                    </tr>
+              </table></td>
+            </tr>
+          </table>
+          </td>
+      </tr>
+    </table>
+      <p><br />
+      </p></td>
+  </tr>
+  </table>
+  </div>
+  <div id="bottomDiv">
+    <p><a href="http://java.sun.com" target="_blank">Java</a> and all Java-based marks are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. <br />
+    All other company and/or product names are the property of their respective owners.</p>
+  </div>
+</div>
+</body>
+</html>

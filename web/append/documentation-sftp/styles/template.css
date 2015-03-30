@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+
+#containerDiv {
+	float:left;
+	width: 780px;
+	background: #FFFFFF;
+	text-align: left;
+}
+#topDiv {
+	float:left;
+	width:100%;
+	height:70px;
+	z-index:1;
+	line-height:normal;
+	border-bottom:2px solid #24618E;
+	background-color: #FFFFFF;
+	background-image: url(logo70.jpg);
+	background-repeat: no-repeat;
+}
+#mainDiv {
+	float: left;
+	width: 100%;
+	z-index:1;
+}
+#sidebarDiv {
+	background-image: url(menu.gif);
+	background-repeat: no-repeat;
+	height: 300px;
+}
+#navDiv {
+	position:absolute;
+	left:430px;
+	top:0px;
+	width:350px;
+	height:70px;
+	z-index:1;
+}
+#bottomDiv {
+    float:left;
+	width: 100%;
+	z-index:1;
+}
+#bottomDiv p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #999999;
+	text-align: center;
+}
+#bottomDiv a {
+	color: #999999;
+	text-decoration: none;
+}
+#bottomDiv a:hover {
+	color: #333333;
+	text-decoration: underline;
+}
+/* Navigation */
+#tabsDiv {
+	float:left;
+	width:100%;
+	font-size:12px;
+	line-height:normal;
+	border-bottom:1px solid #24618E;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+#tabsDiv ul {
+	margin:0;
+	padding:4px 4px 10px 8px;
+	list-style:none;
+}
+#tabsDiv li {
+      display:inline;
+      margin:0;
+      padding:0;
+}
+#tabsDiv a {
+      float:left;
+      background:url("tableft.gif") no-repeat left top;
+      margin:0;
+      padding:0 0 0 5px;
+      text-decoration:none;
+}
+#tabsDiv a span {
+      float:left;
+      display:block;
+      background:url("tabright.gif") no-repeat right top;
+      padding:5px 10px 4px 2px;
+      color:#24618E;
+}
+#tabsDiv a.active {
+	background:url("tableft.gif") no-repeat left top;
+	background-position:0% -42px;
+}
+#tabsDiv a span.active {
+	background-position:100% -42px;
+	color:#FFF;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabsDiv a span {float:none;}
+/* End IE5-Mac hack */
+#tabsDiv a:hover span {
+      color:#FFF;
+}
+#tabsDiv a:hover {
+      background-position:0% -42px;
+}
+#tabsDiv a:hover span {
+      background-position:100% -42px;
+}
+
+/* Search */
+#searchDiv {
+	float:left;
+	width:100%;
+	line-height:normal;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding:6px 0px 6px 0px;
+	text-align: center;
+}
+#searchDiv form {
+	margin: 0;
+}
+#searchDiv label {
+	font-size:10px;
+	color: #999999;
+}
+#searchDiv input
+{
+	color: #24618E;
+	background: #FFFFFF;
+	border: 1px solid #CCCCCC
+}
+#searchDiv input[type="submit"] 
+{
+	color: #999999;
+	background: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	font-size: 10px;
+}
+
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+
+p tr td {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+

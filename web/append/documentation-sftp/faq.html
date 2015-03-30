@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SFTP Documentation - FAQ</title>
+<meta name="description" content="FAQ for SSH file transfer protocol" />
+<meta name="keywords" content="ssh,ftp,sftp,documentation,upload,secure,faq" />
+<link href="styles/template.css" rel="stylesheet" type="text/css" />
+<link href="styles/doc.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+<!--
+#faq .sectionTitle a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#faq .sectionTitle a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+#faq a {
+	color: #000000;
+	text-decoration: none;
+}
+#faq a:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+
+#faq ul {
+	font-size: 10px;
+	padding: 0px;
+	list-style:inside ;
+	margin: 1px;
+}
+#faq tr td {
+	vertical-align: top;
+}
+.border {
+    border: 1px solid #000000;
+}
+-->
+</style>
+</head>
+<body>
+<div id="containerDiv">
+  <div id="topDiv">
+  <div id="navDiv">
+  <div id="tabsDiv"><ul>
+  <li><a href="http://www.jfileupload.com/index.html" title="Home"><span>Home</span></a></li>
+  <li><a href="http://www.jfileupload.com/products/index.html" title="Products"><span>Products</span></a></li>
+  <li><a href="http://www.jfileupload.com/support/index.html" title="Support"><span>Support</span></a></li>
+  <li><a href="http://www.jfileupload.com/purchase/index.html" title="Purchase"><span>Purchase</span></a></li>
+  <li><a href="http://www.jfileupload.com/about/index.html" title="About"><span>About</span></a></li>
+  </ul></div>
+  <div id="searchDiv"></div>
+  </div>
+  </div>
+  <div id="mainDiv">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="20%" valign="top"><div id="sidebar">
+      <div id="sidebarSection">
+        <ul>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="installation.html" title="Installation"><span>Installation</span></a></li>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="configuration.html" title="Configuration"><span>Configuration</span></a></li>
+          <li><img src="styles/bullet.gif" width="7" height="13" border="0" /><a href="faq.html" title="FAQ"><span>FAQ</span></a></li>
+          </ul>
+      </div>
+      <div id="sidebarNav"><br/><br/><a href="index.html" title="Back">&lt;&lt; Back</a></div>
+      </div>    </td>
+    <td width="80%" valign="top"><table width="98%" border="0" cellspacing="1" cellpadding="0" align="center">
+      <tr>
+        <td valign="top"><p align="center" class="mainTitle"><b>- FAQ -</b><div id="faq">
+            <table width="100%" border="0" cellspacing="2">
+              <tr>
+                <td width="50%" class="sectionTitle"><a href="#1">Basic setup (6)</a></td>
+                <td width="50%" class="sectionTitle"><a href="#7">Advanced setup (5)</a></td>
+              </tr>
+              <tr>
+                <td width="50%" class="faq"><ul>
+                  <li><a href="#1">What
+                    do I need to run SFTP ?</a></li>
+                  <li><a href="#2">How
+                    to setup SFTP ?</a></li>
+                  <li><a href="#3">What SFTP server are supported ?</a></li>
+                  <li><a href="#4">How to enable resume ?</a></li>
+                  <li><a href="#5">I get invalid credentials error ?</a></li>
+                  <li><a href="#6">How to modify colors and buttons of the UI ?</a></li>
+                </ul></td>
+                <td width="50%"><ul>
+                  <li><a href="#7">How to use SFTP with JDiskExplorer ?</a></li>
+                  <li><a href="#8">How to use SFTP with JBatchUpload ?</a></li>
+                  <li><a href="#9">How to use SFTP with JImageUpload ?</a></li>
+                  <li><a href="#10">How to setup an initial  folder where files will be uploaded ?</a></li>
+                  <li><a href="#22">How to upload files, folders and subfolders  ?</a></li>
+                </ul></td>
+              </tr>
+              <tr>
+                <td width="50%" class="sectionTitle"><a href="#11">Security (3)</a></td>
+                <td width="50%" class="sectionTitle"><a href="#20">Others (1)</a></td>
+                </tr>
+              <tr>
+                <td width="50%"><ul>
+                  <li><a href="#11">How to prompt for SSH login password ?</a></li>
+                  <li><a href="#12">How to not pass plain login/password in JavaScript ?</a></li>
+                  <li><a href="#13">How SFTP is secure  ?</a></li>
+                </ul></td>
+                <td width="50%"><ul>
+                  <li><a href="#20">Can I use SFTP Pro with JFileUpload Enterprise ?</a></li>
+                </ul></td>
+                </tr>
+            </table>
+        </div>
+            <table width="100%" border="0" cellspacing="1" cellpadding="1">
+              <tr>
+                <td><div align="center"><hr size="2" noshade="noshade" />
+                </div></td>
+              </tr>
+              <tr>
+                <td ><table width="100%" border="0" cellspacing="1" cellpadding="1">
+                  <tr>
+                    <td class="sectionTitle">Basic setup</td>
+                  </tr>
+                </table></td>
+              </tr>
+              <tr>
+                <td><ul>
+                    <li><a name="1" id="1"></a><b>What do I need to run SFTP ?<br />
+                    </b>You need <a href="http://www.java.com" target="_blank">Java</a> (JRE 1.4 or higher) installed on client-side and JFileUpload installed.</li>
+                    <li><a name="2" id="2"></a><b>How to setup SFTP ?<br />
+                    </b>SFTP package  includes a sample file  (applet_sftp.js) for upload. Edit and modify parameters in this file (url, username and password) matching to your server.</li>
+                    <li><a name="3" id="3"></a><b>What SFTP server are supported ?<br />
+                    </b>It should work with any SFTP server with SSHv2 and SFTP v0, v1, v2 and v3. We've successfully tested it with Core FTP server, Titan FTP server and PURE FTPd server.</li>
+                    <li><a name="4" id="4"></a><b>How to enable resume ? </b><br />
+                      Add the following parameter:<br />
+                      &lt;PARAM NAME=&quot;resume&quot; VALUE=&quot;true&quot;&gt;</li>
+                    <li><a name="5" id="5"></a><b>I get invalid credentials error ? </b><br />
+                      Make sure that url, username and password are correct. Test your SFTP connection with a regular SFTP client such as FileZilla.</li>
+                    <li><a name="6" id="6"></a><b>How to modify colors and buttons of the UI ? </b><br />
+You have setup resources parameter and modify a i18n.properties text file. A tutorial is available <a href="http://www.jfileupload.com/products/jfileupload/documentation/tutorials/customization.html">here</a>. &lt;PARAM NAME=&quot;resources&quot; VALUE=&quot;i18n&quot;&gt;</li>
+                </ul>
+                  <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                    <tr>
+                      <td class="sectionTitle">Advanced setup</td>
+                    </tr>
+                  </table>
+                  <ul>
+                    <li><a name="7" id="7"></a><b>How to use SFTP with JDiskExplorer ?<br />
+                    </b>1 - Start from your existing JDiskExplorer already setup for a FTP server.<br />
+                    2 - Copy <strong>sftpimpl.jar</strong> and <strong>jsch.jar</strong> into the lib/ folder with others JAR files.<br />
+                    3 - 
+                    Append <strong>,lib/sftpimpl.jar,lib/jsch.jar </strong>to all ARCHIVE parameters in the JDiskExplorer explorer JavaScript.<br />
+                    4 - Update url parameter to have something like<strong> sftp://yourserver.com</strong><br />
+                    5 - Update username and password if required.<br />
+                    There is a ready-to-use applet_sftp_explorer.js JavaScript in<a href="samples/"> samples/</a> folder.</li>
+                    <li><a name="8" id="8"></a><b>How to use SFTP with JBatchUpload  ?<br />
+                    </b>Same answer as question above, just replace JDiskExploxer word by JBatchUpload.</li>
+                    <li><a name="9" id="9"></a><b>How to use SFTP with JImageUpload ?<br />
+                    </b>Same answer as first question above, just replace JDiskExploxer word by JImageUpload.</li>
+                    <li><a name="10" id="10"></a><b>How to setup an initial folder where files will be uploaded ?<br />
+                    </b>Setup account extra parameter such as:<br />
+                    &lt;PARAM NAME=&quot;param7&quot; VALUE=&quot;account&quot;&gt;<br />
+&lt;PARAM NAME=&quot;value7&quot; VALUE=&quot;yourremotefolder&quot;&gt;</li>
+                    <li><a name="22" id="22"></a><b>How to upload files, folders and subfolders ?<br />
+                    </b>Add the following parameters:<br />
+                    &lt;PARAM NAME=&quot;folderdepth&quot; VALUE=&quot;-1&quot;&gt;<br />
+&lt;PARAM NAME=&quot;param6&quot; VALUE=&quot;relativefilename&quot;&gt;<br />
+&lt;PARAM NAME=&quot;value6&quot; VALUE=&quot;true&quot;&gt;</li>
+                  </ul>
+                  <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                                          <tr>
+                                            <td class="sectionTitle">Security</td>
+                        </tr>
+                      </table>
+                  <ul>
+                    <li><a name="11" id="11"></a><b>How to prompt for SSH login/password ?<br />
+                      </b>Remove all username and password parameters in the JavaScript and add the authentication parameter:<br />
+  &lt;PARAM NAME=&quot;authentication&quot; VALUE=&quot;auto&quot;&gt;</li>
+                    <li><a name="12" id="12"></a><b>How to not pass the plain login/password in JavaScript ?<br />
+                      </b>You can move username and password in i18n.properties. You can also BASE64 encode them. See <a href="http://www.jfileupload.com/products/jfileupload/documentation/faq.html#32">JFileUpload FAQ</a> to see how to proceed. Since 2.3 encryption is available for username and password, we can encrypt your credentials upon request to our support team.</li>
+                    <li><a name="13" id="13"></a><b>How SFTP is secure ?<br />
+                      </b>SFTP stands for SSH File Transfer Protocol. Security comes from <a href="http://en.wikipedia.org/wiki/Secure_Shell" target="_blank">SSH</a> which rely on encrypted communication with the server.<br />
+                    </li>
+                    </ul>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <tr>
+                      <td class="sectionTitle">Others</td>
+                    </tr>
+                  </table>
+                  <ul>
+                        <li><a name="20" id="20"></a><b>Can I use SFTP  Pro with JFileUpload Enterprise ? </b><br />
+No, SFTP Pro works with JFileUpload Pro only. SFTP Enterprise requires  JFileUpload Enterprise or Premium.<br />
+                        <br />
+                  </li>
+                      </ul>                  </td>
+              </tr>
+            </table>            </td>
+      </tr>
+    </table></td>
+  </tr>
+  </table>
+  </div>
+  <div id="bottomDiv">
+    <p><a href="http://java.sun.com" target="_blank">Java</a> and all Java-based marks are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries. <br />
+    All other company and/or product names are the property of their respective owners.</p>
+  </div>
+</div>
+</body>
+</html>
