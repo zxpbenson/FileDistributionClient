@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -30,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileView;
 
 public class SwingClient {
 	private boolean realEnv = false;
@@ -50,33 +52,35 @@ public class SwingClient {
 
 	private JPanel jPanelSouth = new JPanel();
 	
+	private int jTextFieldLength = 100;
+	
 	private JPanel jPanel_1 = new JPanel();
 	private JLabel jLabel_1 = new JLabel();
-	private JTextField jTextField_1 = new JTextField();
+	private JTextField jTextField_1 = new JTextField(this.jTextFieldLength);
 
 	private JPanel jPanel_2 = new JPanel();
 	private JLabel jLabel_2 = new JLabel();
-	private JPasswordField jTextField_2 = new JPasswordField();
+	private JPasswordField jTextField_2 = new JPasswordField(this.jTextFieldLength);
 
 	private JPanel jPanel_3 = new JPanel();
 	private JLabel jLabel_3 = new JLabel();
-	private JTextField jTextField_3 = new JTextField();
+	private JTextField jTextField_3 = new JTextField(this.jTextFieldLength);
 
 	private JPanel jPanel_4 = new JPanel();
 	private JLabel jLabel_4 = new JLabel();
-	private JTextField jTextField_4 = new JTextField();
+	private JTextField jTextField_4 = new JTextField(this.jTextFieldLength);
 
 	private JPanel jPanel_5 = new JPanel();
 	private JLabel jLabel_5 = new JLabel();
-	private JTextField jTextField_5 = new JTextField();
+	private JTextField jTextField_5 = new JTextField(this.jTextFieldLength);
 
 	private JPanel jPanel_6 = new JPanel();
 	private JLabel jLabel_6 = new JLabel();
-	private JTextField jTextField_6 = new JTextField();
+	private JTextField jTextField_6 = new JTextField(this.jTextFieldLength);
 
 	private JPanel jPanel_7 = new JPanel();
 	private JLabel jLabel_7 = new JLabel();
-	private JTextField jTextField_7 = new JTextField();
+	private JTextField jTextField_7 = new JTextField(this.jTextFieldLength);
 	
 	private JFileChooser jFileChooser = new JFileChooser();
 	private JButton jButtonSelFile = new JButton("选择文件", img_2);
@@ -124,11 +128,17 @@ public class SwingClient {
         jmb.add(jm1);
         jmb.add(jm2);
         jmb.add(jm3);
-	    this.jFrame.setJMenuBar(jmb);
+        
+        JMenuItem jmi1 = new JMenuItem("登录");
+        JMenuItem jmi2 = new JMenuItem("注销");
+        jm1.add(jmi1);
+        jm1.add(jmi2);
+        
+	    //this.jFrame.setJMenuBar(jmb);
 	    
 	    this.jFrame.setIconImage(img_1);
 		this.jFrame.setLayout(new BorderLayout(2, 3));
-		this.jFrame.setSize(500, 500);
+		this.jFrame.setSize(1000, 500);
 		this.jFrame.setLocationByPlatform(true);
 		this.jFrame.setResizable(false);
 		this.jFrame.setLocation(500, 270);
@@ -148,11 +158,12 @@ public class SwingClient {
 		//this.jScrollPane.setVisible(true);
 		this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		this.jFrame.add(jScrollPane, BorderLayout.CENTER);
+		this.jFrame.add(jScrollPane, BorderLayout.SOUTH);
 		
 		this.jFileChooser.setDialogTitle("选择上传文件");
 		this.jFileChooser.setMultiSelectionEnabled(false);
 		this.jFileChooser.setApproveButtonText("确定");
+		this.jFileChooser.setControlButtonsAreShown(false);
 		
 		this.jPanelSouth.setLayout(new BoxLayout(jPanelSouth, BoxLayout.Y_AXIS));
 		addComponentToPanel(jPanelSouth, jPanel_1, jLabel_1, jTextField_1, "认证账号 : ", "zhangke");
@@ -170,7 +181,11 @@ public class SwingClient {
 		this.jPanel_8.add(this.jButtonClearConsole);
 		this.jPanelSouth.add(this.jPanel_8);
 		
-		this.jFrame.add(this.jPanelSouth, BorderLayout.SOUTH);
+		this.jFrame.add(this.jPanel_8, BorderLayout.NORTH);
+		
+		this.jFrame.add(this.jPanelSouth, BorderLayout.CENTER);
+		
+		this.jFrame.add(this.jFileChooser, BorderLayout.WEST);
 		
 		this.jFrame.setVisible(true);
 		this.jFrame.repaint();
