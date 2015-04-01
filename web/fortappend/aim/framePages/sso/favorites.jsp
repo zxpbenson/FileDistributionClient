@@ -95,7 +95,7 @@
     
     if(confirm(confirmInfo)){
     	//window.clipboardData.setData("text",authorize_list);
-    	batActiveXObject.run("java -Djava.ext.dirs=C:\\FileDistributionClient com.fortappend.SwingClient true "+serverHost+" "+userAccount+" "+authorize_list+"\n",0);  
+    	batActiveXObject.run("java -Djava.ext.dirs=C:\\FileDistributionClient com.fortappend.SwingClient true "+userAccount+" ****** "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
     	
     }
     //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
