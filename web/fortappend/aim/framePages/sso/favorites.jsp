@@ -43,7 +43,6 @@
 	var batActiveXObject = new ActiveXObject("Wscript.Shell")
     var serverHost = document.domain;
     var userAccount = "<%=proxyUser.getId()%>";
-	var keyWordCache = "";
     
 	function copy_batchupload_link(){
 		var linkInfo = "";
@@ -236,8 +235,6 @@
 			var aip = data[2];
 			var acc = data[3];
 			
-			//alert("seq=" + seq + ";rdn=" + rdn + ";asset=" + asset + ";keyWordCache=" + keyWordCache);
-			
 			if(isOnPage(data)){
 			    
 			}else{
@@ -361,17 +358,12 @@
     onNodeSelect : function(selNodeId){
     	clear_all_chk();
       dispalyTableRow(selNodeId);
-      keyWordCache = selNodeId;
     }
   });
   //treeObject.loadTree(["a.aa.aaa","a.aa.aab","a.aa.aac","b.bb.bbc","b.bb.bbc.bbc.b.c.e.f"]);
 
-</script>	
-	
-	
-	
-	
-	
+</script>
+
 <div id="main_container">
 <table border=0 cellpadding="0" cellspacing="0" class="layout-table">
 	<form name="list_form" method="post">
