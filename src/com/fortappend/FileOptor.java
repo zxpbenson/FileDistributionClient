@@ -40,7 +40,7 @@ public class FileOptor {
 		try{
 		    connect(formData[2], FortEnv.fortRoot, realEnv?FortEnv.fortRootPwd_real:FortEnv.fortRootPwd, Integer.parseInt(formData[3]));
 		    
-		    validateUser(formData[0], formData[1]);
+		    //validateUser(formData[0], formData[1]);
 
 		    //String[][] assetCnAndAccountCnArr = decodeResource(formData[5]);
 		    
