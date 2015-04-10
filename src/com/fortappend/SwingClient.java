@@ -2,6 +2,7 @@ package com.fortappend;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 //import java.awt.Menu;
@@ -15,11 +16,13 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 //import javax.swing.JLabel;
 //import javax.swing.JMenu;
 //import javax.swing.JMenuBar;
@@ -27,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 //import javax.swing.JTextField;
 //import javax.swing.JPasswordField;
 import javax.swing.UIManager;
@@ -77,9 +81,9 @@ public class SwingClient {
     // private JLabel jLabel_4 = new JLabel();
     // private JTextField jTextField_4 = new JTextField();
     //
-    // private JPanel jPanel_5 = new JPanel();
-    // private JLabel jLabel_5 = new JLabel();
-    // private JTextField jTextField_5 = new JTextField();
+    private JPanel jPanel_5 = new JPanel();
+    private JLabel jLabel_5 = new JLabel();
+    private JTextField jTextField_5 = new JTextField();
     //
     // private JPanel jPanel_6 = new JPanel();
     // private JLabel jLabel_6 = new JLabel();
@@ -115,19 +119,23 @@ public class SwingClient {
         // 4)this.jTextField_6.setText(args[3]);//targetHostList
         // if(args.length >= 4)this.jTextField_2.setText("");//password
         // if(args.length >= 4)this.jTextField_7.setText("");//targetFile
-
-        if (args.length > 2)
+        
+        for(int index = 0; index < args.length; index++){
+            consoleAppend("args["+index+"]=" + args[index]);
+        }
+        
+        if (args.length >= 2)
             this.userAccount = args[1] == null ? "" : args[1].trim();
-        if (args.length > 3)
-            this.userPassword = args[2] == null ? "" : args[2].trim();
-        if (args.length > 4)
-            this.fortHost = args[3] == null ? "" : args[3].trim();
-        if (args.length > 5)
-            this.fortPort = args[4] == null ? "" : args[4].trim();
-        if (args.length > 6)
-            this.targetPath = args[5] == null ? "" : args[5].trim();
-        if (args.length > 7)
-            this.targetHosts = args[6] == null ? "" : args[6].trim();
+//        if (args.length > 3)
+//            this.userPassword = args[2] == null ? "" : args[2].trim();
+        if (args.length >= 3)
+            this.fortHost = args[2] == null ? "" : args[2].trim();
+        if (args.length >= 4)
+            this.fortPort = args[3] == null ? "" : args[3].trim();
+        if (args.length >= 5)
+            this.targetPath = args[4] == null ? "" : args[4].trim();
+        if (args.length >= 6)
+            this.targetHosts = args[5] == null ? "" : args[5].trim();
 
     }
 
@@ -150,10 +158,10 @@ public class SwingClient {
         // jm1.add(jmi2);
         //
         // //this.jFrame.setJMenuBar(jmb);
-
+        
         this.jFrame.setIconImage(img_1);
         this.jFrame.setLayout(new BorderLayout(2, 3));
-        this.jFrame.setSize(560, 530);
+        this.jFrame.setSize(560, 560);
         this.jFrame.setLocationByPlatform(true);
         this.jFrame.setResizable(false);
         this.jFrame.setLocation(500, 270);
@@ -175,7 +183,7 @@ public class SwingClient {
                 .setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         this.jScrollPane
                 .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.jFrame.add(jScrollPane, BorderLayout.SOUTH);
+        this.jFrame.add(this.jScrollPane, BorderLayout.SOUTH);
 
         this.jFileChooser.setDialogTitle("选择上传文件");
         this.jFileChooser.setMultiSelectionEnabled(false);
@@ -183,8 +191,7 @@ public class SwingClient {
         this.jFileChooser.setApproveButtonText("确定");
         this.jFileChooser.setControlButtonsAreShown(false);
 
-        // this.jPanelSouth.setLayout(new BoxLayout(jPanelSouth,
-        // BoxLayout.Y_AXIS));
+        this.jPanelSouth.setLayout(new BoxLayout(jPanelSouth, BoxLayout.Y_AXIS));
         // addComponentToPanel(jPanelSouth, jPanel_1, jLabel_1, jTextField_1,
         // "认证账号 : ", "zhangke");
         // addComponentToPanel(jPanelSouth, jPanel_2, jLabel_2, jTextField_2,
@@ -193,8 +200,9 @@ public class SwingClient {
         // "堡垒地址 : ", "192.168.10.129");
         // addComponentToPanel(jPanelSouth, jPanel_4, jLabel_4, jTextField_4,
         // "堡垒端口 : ", "22");
-        // addComponentToPanel(jPanelSouth, jPanel_5, jLabel_5, jTextField_5,
-        // "目标路径 : ", "~/");
+        this.jPanel_5.setPreferredSize(new Dimension(10, 10));
+        this.jPanel_5.setBorder(BorderFactory.createEtchedBorder());
+        addComponentToPanel(jPanelSouth, jPanel_5, jLabel_5, jTextField_5, "   目标路径：    ", "~/");
         // addComponentToPanel(jPanelSouth, jPanel_6, jLabel_6, jTextField_6,
         // "目标主机 : ",
         // "root@Asset_1316159995894567,root@Asset_1316159996475177");
@@ -220,19 +228,20 @@ public class SwingClient {
 
     }
 
-    // private void addComponentToPanel(JPanel panel, JPanel subPanel, JLabel
-    // label, JTextField textField, String labelText, String textFieldText){
-    // label.setText(labelText);
-    // textField.setText(textFieldText);
-    // subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
-    // subPanel.add(label);
-    // subPanel.add(textField);
-    // panel.add(subPanel);
-    // }
+     private void addComponentToPanel(JPanel panel, JPanel subPanel, JLabel
+         label, JTextField textField, String labelText, String textFieldText){
+         label.setText(labelText);
+         textField.setText(textFieldText);
+         subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
+         subPanel.add(label);
+         subPanel.add(textField);
+         panel.add(subPanel);
+     }
 
     private void logParameter() {
         consoleAppend("当前操作用户堡垒机账号[" + userAccount + "]");
-        consoleAppend("当前操作用户堡垒机密码[" + userPassword + "]");
+        //consoleAppend("当前操作用户堡垒机密码[" + userPassword + "]");
+        consoleAppend("当前操作用户堡垒机密码[******]");
         consoleAppend("堡垒机IP[" + fortHost + "]");
         consoleAppend("堡垒机SSH端口[" + fortPort + "]");
         consoleAppend("文件纷发统一目标路径[" + targetPath + "]");
