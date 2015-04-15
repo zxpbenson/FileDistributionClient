@@ -200,9 +200,20 @@ public class SwingClient {
         // "堡垒地址 : ", "192.168.10.129");
         // addComponentToPanel(jPanelSouth, jPanel_4, jLabel_4, jTextField_4,
         // "堡垒端口 : ", "22");
-        this.jPanel_5.setPreferredSize(new Dimension(10, 10));
+        
+        //this.jPanel_5.setPreferredSize(new Dimension(1, 1));
         this.jPanel_5.setBorder(BorderFactory.createEtchedBorder());
-        addComponentToPanel(jPanelSouth, jPanel_5, jLabel_5, jTextField_5, "   目标路径：    ", "~/");
+        
+        jLabel_5.setText("目标路径：");
+        jLabel_5.setBounds(10, 1, 100, 30);
+        jTextField_5.setText("~/");
+        jTextField_5.setBounds(82,1,460,30);
+        jPanel_5.setLayout(null);
+        jPanel_5.add(jLabel_5);
+        jPanel_5.add(jTextField_5);
+        jPanelSouth.add(jPanel_5);
+        
+        //addComponentToPanel(jPanelSouth, jPanel_5, jLabel_5, jTextField_5, "   目标路径：    ", "~/");
         // addComponentToPanel(jPanelSouth, jPanel_6, jLabel_6, jTextField_6,
         // "目标主机 : ",
         // "root@Asset_1316159995894567,root@Asset_1316159996475177");
@@ -228,15 +239,15 @@ public class SwingClient {
 
     }
 
-     private void addComponentToPanel(JPanel panel, JPanel subPanel, JLabel
-         label, JTextField textField, String labelText, String textFieldText){
-         label.setText(labelText);
-         textField.setText(textFieldText);
-         subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
-         subPanel.add(label);
-         subPanel.add(textField);
-         panel.add(subPanel);
-     }
+//     private void addComponentToPanel(JPanel panel, JPanel subPanel, JLabel
+//         label, JTextField textField, String labelText, String textFieldText){
+//         label.setText(labelText);
+//         textField.setText(textFieldText);
+//         subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
+//         subPanel.add(label);
+//         subPanel.add(textField);
+//         panel.add(subPanel);
+//     }
 
     private void logParameter() {
         consoleAppend("当前操作用户堡垒机账号[" + userAccount + "]");
@@ -271,6 +282,8 @@ public class SwingClient {
             // String targetResource = jTextField_2.getText();
             public void actionPerformed(ActionEvent e) {
 
+                targetPath = jTextField_5.getText();
+                
                 File sourceF = jFileChooser.getSelectedFile();
                 if (sourceF != null) {
                     sourceFile = sourceF.getAbsolutePath();
@@ -300,7 +313,7 @@ public class SwingClient {
 
         jButtonClearConsole.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                jTextArea.setText("");
+                jTextArea.setText("Welcome:\n");
             }
         });
     }
@@ -342,7 +355,7 @@ public class SwingClient {
         // this.jTextField_2.setEditable(lock);
         // this.jTextField_3.setEditable(lock);
         // this.jTextField_4.setEditable(lock);
-        // this.jTextField_5.setEditable(lock);
+        this.jTextField_5.setEditable(lock);
         // this.jTextField_6.setEditable(lock);
         // this.jTextField_7.setEditable(lock);
         // this.jButtonSelFile.setEnabled(lock);
@@ -360,8 +373,8 @@ public class SwingClient {
 
         if (!simpleValidate(this.userAccount, "认证账号"))
             return false;
-        if (!simpleValidate(this.userPassword, "认证密码"))
-            return false;
+        //if (!simpleValidate(this.userPassword, "认证密码"))
+        //    return false;
         if (!simpleValidate(this.fortHost, "堡垒地址"))
             return false;
         if (!simpleValidate(this.fortPort, "堡垒端口"))
