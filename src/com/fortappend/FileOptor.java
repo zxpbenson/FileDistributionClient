@@ -52,6 +52,10 @@ public class FileOptor {
 		    
 		    String[][] assetArr = getAsset(assetCnAndAccountCnArr);
 		    
+		    //检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
+		    
+		    //检查对目标路径当前用户是否有写权限
+		    
 		    String tempFilePath = uploadFile(formData[0], formData[6]);
 		
 		    distributeFile(tempFilePath, assetArr, formData[4]);
