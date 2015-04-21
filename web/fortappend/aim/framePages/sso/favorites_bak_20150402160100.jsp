@@ -43,7 +43,7 @@
 	var batActiveXObject = new ActiveXObject("Wscript.Shell")
     var serverHost = document.domain;
     var userAccount = "<%=proxyUser.getId()%>";
-    
+	
 	function copy_batchupload_link(){
 		var linkInfo = "";
     var authorize_list = "$";
@@ -95,7 +95,7 @@
     
     if(confirm(confirmInfo)){
     	//window.clipboardData.setData("text",authorize_list);
-    	batActiveXObject.run("java -Djava.ext.dirs=C:\\FileDistributionClient com.fortappend.SwingClient true "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+    	batActiveXObject.run("java -Djava.ext.dirs=C:\\FileDistributionClient com.fortappend.SwingClient true "+userAccount+" ****** "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
     	
     }
     //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
@@ -130,44 +130,6 @@
 		  }
 		}
 	}
-	
-    function isOnPage(asset){
-        var chks = document.getElementsByName("list_ckb");
-        for (var i = 0; i < chks.length; i++) {
-
-        var tr = chks[i].parentNode.parentNode;
-            
-            if (tr == null) {
-                continue;
-            }
-            
-            var tds = tr.getElementsByTagName("td");
-            if (tds.length < 7) {
-                continue;
-            }
-            
-            var assetName = tds[3].innerHTML.replaceAll("&nbsp;", "");
-            var assetIp = tds[4].innerHTML.replaceAll("&nbsp;", "");
-            var assetAcc = tds[6].innerHTML.replaceAll("&nbsp;", "");
-            var styleDispaly = tr.style.display;
-            
-            if(
-	            assetName == asset[1] 
-	            && assetIp == asset[2] 
-	            && assetAcc == asset[3] 
-	            && (
-	                typeof(styleDispaly) == "undefined" 
-	                || styleDispaly ==""
-	            ) 
-            ){
-                return true;
-            }
-            
-        }
-        
-        return false;
-          
-      }
 	
 	function batch_sso_old() {
 		var chks = document.getElementsByName("list_ckb");
@@ -206,7 +168,7 @@
 		var xmlHttp=new XmlHttpConstruct("/aim/portal.do");	
 		xmlHttp.send("method=batch_sso");
 		var rs=xmlHttp.resText();
-		//alert(rs);
+		
 		if (rs == '') {
 			return;
 		}
@@ -223,8 +185,6 @@
 			return null;
 		}
 		
-		var login_type_delay = 0;
-		
 		for (var i = 1; i < data_line_ary.length - 1; i++) {
 			var line = data_line_ary[i];
 			var data = line.split(";");
@@ -235,22 +195,10 @@
 			var aip = data[2];
 			var acc = data[3];
 			
-			if(isOnPage(data)){
-			    
-			}else{
-			    if(i == 1)login_type_delay = 1;
-			    continue;
-			}
-			
 			if (i == 1) {
 				scrt(login_type , seq, rdn, asset, aip, acc);
 			} else {
-			    if(login_type_delay > 0){
-			        scrt(login_type , seq, rdn, asset, aip, acc);
-			        login_type_delay = 0;
-			    }else{
-     				scrt("union", seq, rdn, asset, aip, acc);
-			    }
+				scrt("union", seq, rdn, asset, aip, acc);
 			}
 			
 			//clear_chk(rdn);
@@ -362,8 +310,12 @@
   });
   //treeObject.loadTree(["a.aa.aaa","a.aa.aab","a.aa.aac","b.bb.bbc","b.bb.bbc.bbc.b.c.e.f"]);
 
-</script>
-
+</script>	
+	
+	
+	
+	
+	
 <div id="main_container">
 <table border=0 cellpadding="0" cellspacing="0" class="layout-table">
 	<form name="list_form" method="post">

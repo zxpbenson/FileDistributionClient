@@ -40,7 +40,7 @@ public class FileOptor {
 		try{
 		    connect(formData[2], FortEnv.fortRoot, realEnv?FortEnv.fortRootPwd_real:FortEnv.fortRootPwd, Integer.parseInt(formData[3]));
 		    
-		    validateUser(formData[0], formData[1]);
+		    //validateUser(formData[0], formData[1]);
 
 		    //String[][] assetCnAndAccountCnArr = decodeResource(formData[5]);
 		    
@@ -51,6 +51,10 @@ public class FileOptor {
 		    String[][] assetCnAndAccountCnArr = getAssetCnAndAccountByAuthorization(formData[0],formData[5]);
 		    
 		    String[][] assetArr = getAsset(assetCnAndAccountCnArr);
+		    
+		    //检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
+		    
+		    //检查对目标路径当前用户是否有写权限
 		    
 		    String tempFilePath = uploadFile(formData[0], formData[6]);
 		
