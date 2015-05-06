@@ -402,7 +402,7 @@ class EchoProcessThread extends Thread{
 <%
 String userId = ProxyUser.getProxyUser(request).getId();
 System.out.println("====>>>userId="+userId+";assetRdn="+a.getId());
-List[] echoListArr = new Cmd().execCmdsInProcess(new String[]{"/bin/sh"}, null, null, new String[]{"FortService Role " + userId + " " + a.getId(), "exit"}, 1);
+List[] echoListArr = new Cmd().execCmdsInProcess(new String[]{"/bin/sh"}, null, null, new String[]{"FortService Role " + userId + " " + a.getId() + " true", "exit"}, 1);
 String echo = (String)echoListArr[0].get(0);
 if(echo == null)echo = "";
 %>
@@ -619,7 +619,7 @@ if(echo == null)echo = "";
 				  String accountStr = accountRdn.substring(3, accountRdn.indexOf(","));
 				  accountStr = ","+accountStr+",";
 				  if(
-				    "admin".equals(userId) || "SUCCESS:0".equals(echo) || "SUCCESS:1".equals(echo) || "SUCCESS:2".equals(echo) || ("SUCCESS:".equals(echo) && echo.indexOf(accountStr) > -1)
+				    "admin".equals(userId) || "SUCCESS:0".equals(echo) || "SUCCESS:1".equals(echo) || "SUCCESS:2".equals(echo) || (echo.startsWith("SUCCESS") && echo.indexOf(accountStr) > -1)
 				  ){
 				 %>
 				 	<input type="button" value="ÐÞ¸Ä" class="tab-button 18x18-button edit-img"  onClick="edit('<%=account.getRdn()%>','<%=account.getAssetType() %>')"/>
