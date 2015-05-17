@@ -52,10 +52,6 @@ public class FileOptor {
 		    
 		    String[][] assetArr = getAsset(assetCnAndAccountCnArr);
 		    
-		    //检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
-		    
-		    //检查对目标路径当前用户是否有写权限
-		    
 		    String tempFilePath = uploadFile(formData[0], formData[6]);
 		
 		    distributeFile(tempFilePath, assetArr, formData[4]);
@@ -162,6 +158,7 @@ public class FileOptor {
 //		}
 //	}
 	
+	//asset[[CN, ASSET_IP, ASSET_PORT, ACCOUNT, DECRYPTION_PASSWORD]]
 	private String[][] getAsset(String[][] assetCnAndAccountCnArr) throws Exception{
 		String[][] assetArr = new String[assetCnAndAccountCnArr.length][];
 		
@@ -191,12 +188,14 @@ public class FileOptor {
 		return assetArr;
 	}
 	
+	private long localFileSize;
 	private String uploadFile(String account, String localFilePath) throws Exception{
 		File file = new File(localFilePath);
-		if(!file.exists()){
-			consoleAppend("本地文件["+localFilePath+"]不存在;");
+		if(!file.exists() || file.isDirectory()){
+			consoleAppend("本地文件["+localFilePath+"]不存在或者是个文件夹;");
 			throw new Exception();
 		}
+		localFileSize = file.length();
 		String tempFilePath = "/tmp/fort_append/"+account+"/"+System.currentTimeMillis();
 		consoleAppend("开始将本地文件["+localFilePath+"]缓存至堡垒机...");
 		sc.close(2);
@@ -207,6 +206,20 @@ public class FileOptor {
 	
 	private void distributeFile(String tempFilePath, String[][] assetArr, String targetPath) throws Exception{
 		for(String[] asset : assetArr){
+			
+			try{
+				boolean check = checkDiskSpaceAndWRight(asset, targetPath);
+				sc.close(2);
+				if(!check){
+					consoleAppend("检查["+asset[3]+"@"+asset[1]+"]失败,跳过文件纷发;");
+					continue;
+				}
+			}catch(Exception e){
+				sc.close(2);
+				consoleAppend("检查["+asset[3]+"@"+asset[1]+"]发生异常,跳过文件纷发;异常信息为:" + e.getMessage());
+				continue;
+			}
+			
 			String command = "scp -P "+asset[2]+" "+tempFilePath+" "+asset[3]+"@"+asset[1]+":"+targetPath+"\n";
 			consoleAppend(command);
 			
@@ -254,6 +267,103 @@ public class FileOptor {
 			}
 		}
 		consoleAppend("文件全部分发完毕;");
+	}
+	
+	//检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
+    //检查对目标路径当前用户是否有写权限
+	private boolean checkDiskSpaceAndWRight(String[] asset, String targetPath) throws Exception{
+		String command = "ssh "+ asset[3]+"@" + asset[1];
+		String echo =  sc.shell(command);
+		boolean addKnownhost = false;
+		if(echo.indexOf("Are you sure you want to continue connecting")>0){
+			echo = sc.shell("yes\n");
+			addKnownhost = true;
+		}
+		
+		Thread.sleep(300);
+		
+		boolean pwdInput = false;
+		if(echo.endsWith("password: ")){
+			echo = sc.shell(asset[4]+"\n", "UTF-8", 0, "# ");
+			pwdInput = true;
+		}
+		
+		Thread.sleep(300);
+		
+		if(!(addKnownhost|| pwdInput)){
+			System.out.println(echo);
+			//consoleAppend(echo);
+		}
+		
+		if(echo.indexOf("Connection refused")>0){
+			System.out.println(echo);
+			consoleAppend("target host Connection refused");
+			return false;
+		}
+		
+		command = "df -l | grep -n '/$' | awk '{print $4}'";
+		echo = sc.shell(command);
+		
+		String[] lineArr = echo.split(""+(char)13);
+		long totalFreeSpace = 0;
+		for(String oneLine : lineArr){
+			totalFreeSpace  += Long.valueOf(oneLine);
+		}
+		if(totalFreeSpace < ((this.localFileSize / 1000) + 100000)){
+			consoleAppend("目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间不足;");
+			return false;
+		}
+		
+		command = "ls -al "+ targetPath +" | grep -e '\\d* .$'";
+		echo = sc.shell(command);
+			
+		if(echo == null || echo.equals("") || echo.equals(""+(char)13)){
+			consoleAppend("目标主机["+asset[3]+"@"+asset[1]+"]目录["+targetPath+"]不是文件夹;");
+			return false;
+		}
+		
+		if(echo.indexOf("cannot access") > -1){
+			consoleAppend(echo);
+			return false;
+		}
+		
+		echo = echo.replaceAll("  ", " ");
+		String[] rightArr = echo.split(" ");
+		String right = rightArr[0];
+		String user = rightArr[0];
+		String group = rightArr[0];
+		
+		if(asset[3].equals(user)){
+			sc.close(2);
+			if(right.charAt(2) == 'w'){
+				return true;
+			}else{
+				consoleAppend("目标目录["+targetPath+"]属于当前用户["+asset[3]+"]但是没有写权限;");
+				return false;
+			}
+		}
+		
+		command = "groups " + asset[3];
+		echo = sc.shell(command);
+		
+		String[] groupsArr = echo.split(" ");
+		String getGroup = groupsArr[2];
+		if(group.equals(getGroup)){
+			if(right.charAt(5) == 'w'){
+				return true;
+			}else{
+				consoleAppend("目标目录["+targetPath+"]不属于属于当前用户["+asset[3]+"]并且同组用户没有写权限;");
+				return false;
+			}
+		}
+		
+		if(right.charAt(8) == 'w'){
+			return true;
+		}else{
+			consoleAppend("目标目录["+targetPath+"]不属所属用户与于当前用户["+asset[3]+"]不在同一组并且其他用户没有写权限;");
+			return false;
+		}
+
 	}
 	
 	private String getLine(String echo,int lineIndex){

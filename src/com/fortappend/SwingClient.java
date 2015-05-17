@@ -422,7 +422,7 @@ public class SwingClient {
         }
 
         if (!validateLocalFilePath(this.sourceFile)) {
-            consoleAppend("[上传文件]路径格式不正确或者文件不存在;");
+            consoleAppend("[上传文件]是个文件夹或者文件不存在;");
             return false;
         }
 
@@ -480,7 +480,7 @@ public class SwingClient {
     private boolean validateLocalFilePath(String uploadFilePath) {
         try {
             File localFile = new File(uploadFilePath);
-            return localFile.exists();
+            return localFile.exists() && localFile.isFile();
         } catch (Exception e) {
             return false;
         }
