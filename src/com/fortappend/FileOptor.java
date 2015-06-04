@@ -116,7 +116,7 @@ public class FileOptor {
 			//consoleAppend(echo);
 			System.out.println(echo);
 		} catch (Exception e) {
-			consoleAppend("连接失败;");
+            consoleAppend("连接失败;"+e.getMessage());
 			System.out.println(echo);
 			throw e;
 		}

@@ -179,10 +179,8 @@ public class SwingClient {
         this.jTextArea.setFont(new Font(Font.DIALOG, Font.TYPE1_FONT, 11));
 
         // this.jScrollPane.setVisible(true);
-        this.jScrollPane
-                .setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        this.jScrollPane
-                .setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.jFrame.add(this.jScrollPane, BorderLayout.SOUTH);
 
         this.jFileChooser.setDialogTitle("选择上传文件");
@@ -298,8 +296,7 @@ public class SwingClient {
                     public void run() {
                         lockForm(true);
                         try {
-                            FileOptor fileOptor = new FileOptor(realEnv,
-                                    jTextArea);
+                            FileOptor fileOptor = new FileOptor(realEnv,jTextArea);
                             fileOptor.batchUpload(getFormData());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -319,11 +316,11 @@ public class SwingClient {
     }
 
     public static void main(String[] args) {
-
+        //args = new String[]{"false","zhangke","","","","","","",""};
+        
         try {
             // UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");//Mac风格
-            UIManager
-                    .setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
             // UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//Windows风格
             // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");//Java默认风格
 
@@ -508,8 +505,7 @@ public class SwingClient {
         if (targetResource.length() < 3)
             return false;
         targetResource = targetResource.substring(1);
-        targetResource = targetResource.substring(0,
-                targetResource.length() - 1);
+        targetResource = targetResource.substring(0,targetResource.length() - 1);
 
         String[] authorizationArr = targetResource.split("\\$");
         if (authorizationArr == null || authorizationArr.length < 1) {
@@ -554,7 +550,6 @@ public class SwingClient {
     private void consoleAppend(String text) {
         this.jTextArea.append(text);
         this.jTextArea.append("\n");
-        this.jTextArea.setCaretPosition(this.jTextArea.getDocument()
-                .getLength());
+        this.jTextArea.setCaretPosition(this.jTextArea.getDocument().getLength());
     }
 }
