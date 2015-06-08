@@ -307,7 +307,12 @@ public class FileOptor {
 		String[] lineArr = echo.split(""+(char)13);
 		long totalFreeSpace = 0;
 		for(String oneLine : lineArr){
-			totalFreeSpace  += Long.valueOf(oneLine);
+			try{
+				totalFreeSpace  += Long.valueOf(oneLine);
+			}catch(NumberFormatException e){
+				consoleAppend("获取目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间失败;");
+				return false;
+			}
 		}
 		if(totalFreeSpace < ((this.localFileSize / 1000) + 100000)){
 			consoleAppend("目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间不足;");
