@@ -272,7 +272,7 @@ public class FileOptor {
 	//检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
     //检查对目标路径当前用户是否有写权限
 	private boolean checkDiskSpaceAndWRight(String[] asset, String targetPath) throws Exception{
-		String command = "ssh "+ asset[3]+"@" + asset[1];
+		String command = "ssh "+ asset[3]+"@" + asset[1] + "\n";
 		String echo =  sc.shell(command);
 		boolean addKnownhost = false;
 		if(echo.indexOf("Are you sure you want to continue connecting")>0){
@@ -301,27 +301,32 @@ public class FileOptor {
 			return false;
 		}
 		
-		command = "df -l | grep -n '/$' | awk '{print $4}'";
+		command = "df -l | grep -n '/$' | awk '{print $4}'\n";
 		echo = sc.shell(command);
 		
 		String[] lineArr = echo.split(""+(char)13);
 		long totalFreeSpace = 0;
 		for(String oneLine : lineArr){
 			try{
-				totalFreeSpace  += Long.valueOf(oneLine);
+				totalFreeSpace  += Long.valueOf(oneLine.trim());
 			}catch(NumberFormatException e){
-				consoleAppend("获取目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间失败;");
-				return false;
 			}
 		}
+		
+		if(totalFreeSpace < 1){
+			consoleAppend("获取目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间失败;");
+			return false;
+		}
+		
 		if(totalFreeSpace < ((this.localFileSize / 1000) + 100000)){
 			consoleAppend("目标主机["+asset[3]+"@"+asset[1]+"]磁盘剩余空间不足;");
 			return false;
 		}
 		
-		command = "ls -al "+ targetPath +" | grep -e '\\d* .$'";
+		command = "ls -al "+ targetPath +" | grep -e '\\d* .$'\n";
 		echo = sc.shell(command);
-			
+		echo = getLine(echo, 1);
+		
 		if(echo == null || echo.equals("") || echo.equals(""+(char)13)){
 			consoleAppend("目标主机["+asset[3]+"@"+asset[1]+"]目录["+targetPath+"]不是文件夹;");
 			return false;
@@ -335,8 +340,8 @@ public class FileOptor {
 		echo = echo.replaceAll("  ", " ");
 		String[] rightArr = echo.split(" ");
 		String right = rightArr[0];
-		String user = rightArr[0];
-		String group = rightArr[0];
+		String user = rightArr[2];
+		String group = rightArr[3];
 		
 		if(asset[3].equals(user)){
 			sc.close(2);
@@ -348,7 +353,7 @@ public class FileOptor {
 			}
 		}
 		
-		command = "groups " + asset[3];
+		command = "groups " + asset[3] + "\n";
 		echo = sc.shell(command);
 		
 		String[] groupsArr = echo.split(" ");

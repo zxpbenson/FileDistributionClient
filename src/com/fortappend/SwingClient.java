@@ -317,6 +317,7 @@ public class SwingClient {
 
     public static void main(String[] args) {
         //args = new String[]{"false","zhangke","192.168.10.129","22","~/","$00521B692$1351713120505256$"};
+        //args = new String[]{"false","zhangke","192.168.10.129","22","~/","$00521B692$"};
         
         try {
             // UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");//Mac风格

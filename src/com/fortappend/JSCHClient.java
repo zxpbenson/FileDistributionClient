@@ -66,7 +66,7 @@ public class JSCHClient {
 	}
 
 	public String shell(String command) throws Exception{
-		return shell(command, "UTF-8", 1000, "# ");
+		return shell(command, "UTF-8", 2000, "# ");
 	}
 	
 	public String shell(String command, String echo_charset_name, long timeout, String prompt) throws Exception{
