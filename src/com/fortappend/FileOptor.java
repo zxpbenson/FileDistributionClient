@@ -301,7 +301,7 @@ public class FileOptor {
 			return false;
 		}
 		
-		command = "df -l | grep -n '/$' | awk '{print $4}'\n";
+		command = "df -k | grep -n '/$' | awk '{print $4}'\n";
 		echo = sc.shell(command);
 		
 		String[] lineArr = echo.split(""+(char)13);
