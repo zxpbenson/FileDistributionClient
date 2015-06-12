@@ -207,23 +207,23 @@ public class FileOptor {
 	private void distributeFile(String tempFilePath, String[][] assetArr, String targetPath) throws Exception{
 		for(String[] asset : assetArr){
 			
-			try{
-				boolean check = checkDiskSpaceAndWRight(asset, targetPath);
-				sc.close(2);
-				if(!check){
-					consoleAppend("检查["+asset[3]+"@"+asset[1]+"]失败,跳过文件纷发;");
-					continue;
-				}
-			}catch(Exception e){
-				sc.close(2);
-				consoleAppend("检查["+asset[3]+"@"+asset[1]+"]发生异常,跳过文件纷发;异常信息为:" + e.getMessage());
-				continue;
-			}
+//			try{
+//				boolean check = checkDiskSpaceAndWRight(asset, targetPath);
+//				sc.close(2);
+//				if(!check){
+//					consoleAppend("检查["+asset[3]+"@"+asset[1]+"]失败,跳过文件纷发;");
+//					continue;
+//				}
+//			}catch(Exception e){
+//				sc.close(2);
+//				consoleAppend("检查["+asset[3]+"@"+asset[1]+"]发生异常,跳过文件纷发;异常信息为:" + e.getMessage());
+//				continue;
+//			}
 			
 			String command = "scp -P "+asset[2]+" "+tempFilePath+" "+asset[3]+"@"+asset[1]+":"+targetPath+"\n";
 			consoleAppend(command);
 			
-			String echo = sc.shell(command, "UTF-8", 0, new String[]{"# ", "password: ","lost connection","Connection refused"}, new PromptMatcher(){
+			String echo = sc.shell(command, "UTF-8", 0, new String[]{"# ", "password: ", "Password: ", "lost connection", "Connection refused"}, new PromptMatcher(){
 				public boolean match(String echo, String prompt){
 					if( echo.endsWith(prompt))return true;
 					echo = echo.trim();
