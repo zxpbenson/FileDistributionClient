@@ -36,11 +36,16 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 //import javax.swing.filechooser.FileView;
 
 public class SwingClient {
     private boolean realEnv = false;
 
+    private static final Logger logger = LogManager.getLogger(SwingClient.class);
+    
     private String userAccount = "";// 当前操作用户堡垒机账号
     private String userPassword = "";// 当前操作用户堡垒机密码
     private String fortHost = "";// 堡垒机IP
@@ -133,7 +138,7 @@ public class SwingClient {
         if (args.length >= 4)
             this.fortPort = args[3] == null ? "" : args[3].trim();
         if (args.length >= 5)
-            this.targetPath = args[4] == null ? "" : args[4].trim();
+            this.targetPath = "";//args[4] == null ? "" : args[4].trim();
         if (args.length >= 6)
             this.targetHosts = args[5] == null ? "" : args[5].trim();
 
@@ -204,7 +209,7 @@ public class SwingClient {
         
         jLabel_5.setText("目标路径：");
         jLabel_5.setBounds(10, 1, 100, 30);
-        jTextField_5.setText("~/");
+        jTextField_5.setText("");
         jTextField_5.setBounds(82,1,460,30);
         jPanel_5.setLayout(null);
         jPanel_5.add(jLabel_5);
@@ -552,5 +557,6 @@ public class SwingClient {
         this.jTextArea.append(text);
         this.jTextArea.append("\n");
         this.jTextArea.setCaretPosition(this.jTextArea.getDocument().getLength());
+        logger.info(text);
     }
 }
