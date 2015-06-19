@@ -96,7 +96,7 @@
     if(confirm(confirmInfo)){
         alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
     	//window.clipboardData.setData("text",authorize_list);
-    	batActiveXObject.run("C:\\FileDistributionClient\\jre\\bin\\java -cp C:\\FileDistributionClient\\FileDistributionClient.jar;C:\\FileDistributionClient\\jsch-0.1.51.jar;C:\\FileDistributionClient\\log4j-core-2.1.jar;C:\\FileDistributionClient\\log4j-api-2.1.jar; com.fortappend.SwingClient true "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+    	batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
     }
     //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
     //for(var j = 0; j < nameArr.length; j++){
