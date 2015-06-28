@@ -15,7 +15,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 public class JSCHClient {
-    private boolean debug = true;
+    //private boolean debug = false;
     private static final Logger logger = LogManager.getLogger(JSCHClient.class);
     
     public static final String channel_type_sftp = "sftp";
@@ -74,10 +74,10 @@ public class JSCHClient {
     }
     
     public String shell(String command, String echo_charset_name, long timeout, String prompt) throws Exception{
-         return shell(command, echo_charset_name, timeout, new  String[] {prompt}, null);
+         return shell(command, echo_charset_name, timeout, new  String[] {prompt}, null, null);
     }
     
-    public String shell(String command, String echo_charset_name, long timeout, String[] prompt, PromptMatcher matcher) throws Exception{
+    public String shell(String command, String echo_charset_name, long timeout, String[] prompt, PromptMatcher pMatcher, EchoMatcher[] eMatcherArr) throws Exception{
         if(channel == null){
             channel = session.openChannel(JSCHClient.channel_type_shell);
             channel.connect(1000);
@@ -95,9 +95,28 @@ public class JSCHClient {
         while(true){
             Thread.sleep(200);
             if(channel.isClosed() || !session.isConnected()){
-                if(debug)logger.info("channel closed, break.");
+                logger.debug("channel closed, break.");
                 break;
             }
+            
+            if(eMatcherArr != null){
+                while(instream.available() > 0){
+                    byte[] data = new byte[instream.available()];
+                    int nLen = instream.read(data);
+                     
+                    if (nLen < 0) {
+                        throw new Exception("network error.");
+                    }
+                    String echo = new String(data, 0, nLen, echo_charset_name);
+                    logger.debug("-----------echo splitys : \n " + echo);
+                    sb.append(echo);
+                    
+                    for(EchoMatcher eMatcher : eMatcherArr){
+                        eMatcher.match(sb.toString());
+                    }
+                }
+            }
+            
             if (instream.available() > 0) {
                 byte[] data = new byte[instream.available()];
                 int nLen = instream.read(data);
@@ -106,20 +125,21 @@ public class JSCHClient {
                     throw new Exception("network error.");
                 }
                 String echo = new String(data, 0, nLen, echo_charset_name);
-                if(debug)logger.info("-----------echo splitys : \n " + echo);
+                logger.debug("-----------echo splitys : \n " + echo);
                 sb.append(echo);
             }
+            
             boolean getPrompt = false;
             for(String onePrompt : prompt){
-                if(matcher == null){
+                if(pMatcher == null){
                     if(sb.toString().endsWith(onePrompt)){
-                        if(debug)logger.info("echo finish, break.");
+                        logger.debug("echo finish, break.");
                         getPrompt = true;
                         break;
                     }
                 }else{
-                    if(matcher.match(sb.toString(), onePrompt)){
-                        if(debug)logger.info("echo finish, break.");
+                    if(pMatcher.match(sb.toString(), onePrompt)){
+                        logger.debug("echo finish, break.");
                         getPrompt = true;
                         break;
                     }
@@ -127,11 +147,11 @@ public class JSCHClient {
             }
             if(getPrompt)break;
             if(timeout == 0){
-                if(debug)logger.info("timeout less, continue.");
+                logger.debug("timeout less, continue.");
                 continue;
             }
             if(System.currentTimeMillis() - start > timeout){
-                if(debug)logger.info("timeout, break.");
+                logger.debug("timeout, break.");
                 break;
             }
         }
@@ -197,7 +217,7 @@ public class JSCHClient {
             String[] attArr = v.get(i).toString().split(" ");
             if(attArr != null){
                 length = attArr.length;
-                if(debug)logger.info("fileName : "+attArr[length - 1]);
+                logger.debug("fileName : "+attArr[length - 1]);
                 if(attArr[length - 1].equals(fileName)){
                     //throw new Exception("file already exists");
                     return true;
@@ -231,7 +251,7 @@ public class JSCHClient {
         try {
             //sc.connect("192.168.10.129", "root", "root");
             sc.connect("fort.simp.com", "root", "root");
-            logger.info(sc.shell("rm -r /tmp/fort_append/abc"));if(true)return;
+            //logger.info(sc.shell("rm -r /tmp/fort_append/abc\n"));//if(true)return;
             //sc.uploadFile("E:/install_src/ubuntu-12.10-server-amd64.iso", "/", "ubuntu12.iso", true, false);
             //sc.uploadFile("E:/install_src/jdk-6u45-windows-x64.exe_", "/", "jdk6.exe", true, false);
             //sc.uploadFile("D:/ubuntu-12.10-server-amd64.iso", "/tmp", "ubuntu12.iso", true, false);
@@ -249,7 +269,9 @@ public class JSCHClient {
 //             //String echo = sc.shell("scp jdk6.exe root@192.168.10.102:/\n", "UTF-8", 0, "password: ");
 //            //String echo = sc.shell("scp decode.bat root@192.168.10.102:/\n", "UTF-8", 0, "password: ");
             
-            String echo = sc.shell("scp /tmp/ubuntu12.iso root@192.168.10.103:/\n","UTF-8", 0, new String[]{"# ", "password: ","lost connection","Connection refused"}, new PromptMatcher(){
+            String charSet = "UTF-8";
+            String[] appendPrompt = new String[]{"# ", "assword: ","lost connection","Connection refused"};
+            PromptMatcher pMatcher = new PromptMatcher(){
                 public boolean match(String echo, String prompt){
                     if( echo.endsWith(prompt))return true;
                     echo = echo.trim();
@@ -258,9 +280,19 @@ public class JSCHClient {
                     logger.info("prompt===="+prompt);
                     return echo.endsWith(prompt);
                 }
-            });
-            logger.info("????");
+            };
+            EchoMatcher[] eMatcherArr = new EchoMatcher[]{new EchoMatcher(){
+                public boolean match(String echo){
+                    String echoTrim = echo.trim();
+                    if(echoTrim.endsWith(" ETA")){
+                        logger.info(echo);
+                        return true;
+                    }
+                    return false;
+                }
+            }};
             
+            String echo = sc.shell("scp /root/tomcat.tar root@192.168.10.130:/\n", charSet, 0, appendPrompt, pMatcher, eMatcherArr);
             
             logger.info(echo);
             
@@ -273,8 +305,8 @@ public class JSCHClient {
             
             Thread.sleep(300);
             
-            if(echo.endsWith("password: ")){
-                echo = sc.shell("root\n", "UTF-8", 0, "# ");
+            if(echo.endsWith("assword: ")){
+                echo = sc.shell("root\n", charSet, 0, appendPrompt, pMatcher, eMatcherArr);
                 logger.info(echo);
             }
             

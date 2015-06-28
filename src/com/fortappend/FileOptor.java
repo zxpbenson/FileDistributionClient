@@ -211,6 +211,30 @@ public class FileOptor {
     
     private void distributeFile(String tempFilePath, String[][] assetArr, String targetPath) throws Exception{
         sc.shell("sh\n");
+        
+        String charSet = "UTF-8";
+        String[] appendPrompt = new String[]{"# ", "assword: ","lost connection","Connection refused"};
+        PromptMatcher pMatcher = new PromptMatcher(){
+            public boolean match(String echo, String prompt){
+                if( echo.endsWith(prompt))return true;
+                echo = echo.trim();
+                prompt = prompt.trim();
+                logger.info("echo===="+echo);
+                logger.info("prompt===="+prompt);
+                return echo.endsWith(prompt);
+            }
+        };
+        EchoMatcher[] eMatcherArr = new EchoMatcher[]{new EchoMatcher(){
+        	public boolean match(String echo){
+        		String echoTrim = echo.trim();
+        		if(echoTrim.endsWith(" ETA")){
+        			consoleAppend(echo);
+        			return true;
+        		}
+        		return false;
+        	}
+        }};
+        
         for(String[] asset : assetArr){
             
 //            try{
@@ -229,16 +253,7 @@ public class FileOptor {
             String command = "scp -P "+asset[2]+" "+tempFilePath+" "+asset[3]+"@"+asset[1]+":"+targetPath+"\n";
             consoleAppend(command);
             
-            String echo = sc.shell(command, "UTF-8", 0, new String[]{"# ", "password: ", "Password: ", "lost connection", "Connection refused"}, new PromptMatcher(){
-                public boolean match(String echo, String prompt){
-                    if( echo.endsWith(prompt))return true;
-                    echo = echo.trim();
-                    prompt = prompt.trim();
-                    logger.info("echo===="+echo);
-                    logger.info("prompt===="+prompt);
-                    return echo.endsWith(prompt);
-                }
-            });
+            String echo = sc.shell(command, charSet, 0, appendPrompt, pMatcher, eMatcherArr);
             logger.info("命令发送完毕");
             Thread.sleep(300);
             
@@ -254,7 +269,7 @@ public class FileOptor {
             
             boolean pwdInput = false;
             if(echo.endsWith("assword: ")){
-                echo = sc.shell(asset[4]+"\n", "UTF-8", 0, "# ");
+                echo = sc.shell(asset[4]+"\n", charSet, 0, appendPrompt, pMatcher, eMatcherArr);
                 logger.info(echo);
                 //consoleAppend(echo);
                 pwdInput = true;
@@ -266,13 +281,22 @@ public class FileOptor {
                 logger.info(echo);
                 //consoleAppend(echo);
             }
+            if(echo.indexOf("Permission denied")>0){
+                logger.info(echo);
+                consoleAppend("Permission denied : " + asset[3]+"@"+asset[1]);
+            }
+            
+            if(echo.indexOf("lost connection")>0){
+                logger.info(echo);
+                consoleAppend("Connection closed : " + asset[3]+"@"+asset[1]);
+            }
             
             if(echo.indexOf("Connection refused")>0){
                 logger.info(echo);
-                consoleAppend("Connection refused");
+                consoleAppend("Connection refused : " + asset[3]+"@"+asset[1]);
             }
         }
-        consoleAppend("文件全部分发完毕;");
+        consoleAppend("文件纷发执行完毕;");
     }
     
     //检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'

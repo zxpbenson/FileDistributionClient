@@ -2,7 +2,7 @@ package com.fortappend;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+//import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 //import java.awt.Menu;
@@ -126,7 +126,7 @@ public class SwingClient {
         // if(args.length >= 4)this.jTextField_7.setText("");//targetFile
         
         for(int index = 0; index < args.length; index++){
-            consoleAppend("args["+index+"]=" + args[index]);
+            logger.info("args["+index+"]=" + args[index]);
         }
         
         if (args.length >= 2)
