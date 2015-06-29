@@ -111,9 +111,11 @@ public class JSCHClient {
                     logger.debug("-----------echo splitys : \n " + echo);
                     sb.append(echo);
                     
+                    boolean echoMatch = false;
                     for(EchoMatcher eMatcher : eMatcherArr){
-                        eMatcher.match(sb.toString());
+                        echoMatch = echoMatch || eMatcher.match(sb.toString());
                     }
+                    if(!echoMatch)break;
                 }
             }
             
