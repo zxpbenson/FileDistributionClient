@@ -135,13 +135,13 @@ public class JSCHClient {
             for(String onePrompt : prompt){
                 if(pMatcher == null){
                     if(sb.toString().endsWith(onePrompt)){
-                        logger.debug("echo finish, break.");
+                        logger.debug("echo finish without pMatcher, break.");
                         getPrompt = true;
                         break;
                     }
                 }else{
                     if(pMatcher.match(sb.toString(), onePrompt)){
-                        logger.debug("echo finish, break.");
+                        logger.debug("echo finish with pMatcher, break.");
                         getPrompt = true;
                         break;
                     }

@@ -313,7 +313,7 @@ public class FileOptor {
         Thread.sleep(300);
         
         boolean pwdInput = false;
-        if(echo.endsWith("password: ")){
+        if(echo.endsWith("assword: ")){
             echo = sc.shell(asset[4]+"\n", "UTF-8", 0, "# ");
             pwdInput = true;
         }
