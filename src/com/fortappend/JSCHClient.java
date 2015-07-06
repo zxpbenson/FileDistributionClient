@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 
+import javax.swing.JTextArea;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +33,18 @@ public class JSCHClient {
     private OutputStream outstream = null;
     private InputStream instream = null;
 
+    private JTextArea console;
+    
+    public JSCHClient(JTextArea console){
+        this.console = console;
+    }
+    
+    private void consoleAppend(String text){
+        this.console.append(text);
+        this.console.append("\n");
+        this.console.setCaretPosition(this.console.getDocument().getLength());
+    }
+    
     public void connect(String ip, String user, String pwd)throws Exception{
         connect(ip, user, pwd, 22);
     }
@@ -202,10 +216,19 @@ public class JSCHClient {
         File file = new File(sourceFileWithPath);//"c:/print.txt"
         instream = new FileInputStream(file);
         
+        long total = file.length();//文件总大小
+        long cumulative = 0l;//累计
+        long progress = 0l;//进度
+        
         byte b[] = new byte[1024];
         int n;
         while ((n = instream.read(b)) != -1) {
             outstream.write(b, 0, n);
+            cumulative = cumulative + n;
+            if(((cumulative / total)<<2) >= progress){
+                progress = progress + 5;
+                this.consoleAppend(progress+"%");
+            }
         }
         
         outstream.flush();
@@ -249,7 +272,7 @@ public class JSCHClient {
     
     public static void main(String[] args) {
         
-        JSCHClient sc = new JSCHClient();
+        JSCHClient sc = new JSCHClient(null);
         try {
             //sc.connect("192.168.10.129", "root", "root");
             sc.connect("fort.simp.com", "root", "root");

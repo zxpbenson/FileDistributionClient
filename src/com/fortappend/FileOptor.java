@@ -11,13 +11,14 @@ public class FileOptor {
     
     private static final Logger logger = LogManager.getLogger(FileOptor.class);
     
-    JSCHClient sc = new JSCHClient();
+    JSCHClient sc;
     private boolean realEnv;
     private JTextArea console;
     
     public FileOptor( boolean realEnv, JTextArea console){
         this.realEnv = realEnv;
         this.console = console;
+        this.sc = new JSCHClient(console);
     }
     
     private void consoleAppend(String text){
