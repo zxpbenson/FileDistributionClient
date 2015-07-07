@@ -219,18 +219,21 @@ public class JSCHClient {
         long total = file.length();//文件总大小
         long cumulative = 0l;//累计
         long progress = 0l;//进度
-        
+        long progressCal = 0l;
+        this.consoleAppend("0%");
         byte b[] = new byte[1024];
         int n;
         while ((n = instream.read(b)) != -1) {
             outstream.write(b, 0, n);
             cumulative = cumulative + n;
-            if(((cumulative / total)<<2) >= progress){
+            progressCal = cumulative / total << 2;
+            if(progressCal >= progress){
                 progress = progress + 5;
+                progress = progress > progressCal ? progress : progressCal;
                 this.consoleAppend(progress+"%");
             }
         }
-        
+        this.consoleAppend("100%");
         outstream.flush();
     }
     

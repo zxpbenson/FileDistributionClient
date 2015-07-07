@@ -282,19 +282,26 @@ public class FileOptor {
                 logger.info(echo);
                 //consoleAppend(echo);
             }
-            if(echo.indexOf("Permission denied")>0){
+            
+            String lowerCase = echo.toLowerCase();
+            if(lowerCase.indexOf("not a directory") >= 0 || lowerCase.indexOf("no such file or directory") >= 0){
                 logger.info(echo);
-                consoleAppend("Permission denied : " + asset[3]+"@"+asset[1]);
+                consoleAppend("Not a directory : " + asset[3] + "@" + asset[1] + ":" + targetPath);
             }
             
-            if(echo.indexOf("lost connection")>0){
+            if(lowerCase.indexOf("permission denied") >= 0){
                 logger.info(echo);
-                consoleAppend("Connection closed : " + asset[3]+"@"+asset[1]);
+                consoleAppend("Permission denied : " + asset[3] + "@" + asset[1] + ":" + targetPath);
             }
             
-            if(echo.indexOf("Connection refused")>0){
+            if(lowerCase.indexOf("lost connection") >= 0){
                 logger.info(echo);
-                consoleAppend("Connection refused : " + asset[3]+"@"+asset[1]);
+                consoleAppend("Lost connection : " + asset[3] + "@" + asset[1]);
+            }
+            
+            if(lowerCase.indexOf("connection refused") >= 0){
+                logger.info(echo);
+                consoleAppend("Connection refused : " + asset[3] + "@" + asset[1]);
             }
         }
         consoleAppend("文件纷发执行完毕;");

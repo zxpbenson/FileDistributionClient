@@ -16,11 +16,18 @@ dhtmlxTree是树形组件的第三方支持工具
 
 部署时客户端的目录结构为
 
-C:\FileDistributionClient
+D:\FileDistributionClient
     jre
     FileDistributionClient.jar
     jsch-0.1.51.jar
     log4j-api-2.1.jar
     log4j-core-2.1.jar
     run.bat
+    log4j2.xml
 
+修改
+D:\FileDistributionClient\jre\lib\security\java.policy
+在
+  permission java.io.FilePermission "<<ALL FILES>>", "read";
+这一行后面加上
+  permission java.io.FilePermission "<<ALL FILES>>", "write";
