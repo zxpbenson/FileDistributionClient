@@ -216,24 +216,23 @@ public class JSCHClient {
         File file = new File(sourceFileWithPath);//"c:/print.txt"
         instream = new FileInputStream(file);
         
-        long total = file.length();//文件总大小
-        long cumulative = 0l;//累计
-        long progress = 0l;//进度
-        long progressCal = 0l;
-        this.consoleAppend("0%");
+        double total = file.length();//文件总大小
+        double cumulative = 0d;//累计
+        double progress = 0.00d;//进度
+        double progressCal = 0.00d;
         byte b[] = new byte[1024];
         int n;
         while ((n = instream.read(b)) != -1) {
             outstream.write(b, 0, n);
             cumulative = cumulative + n;
-            progressCal = cumulative / total << 2;
+            progressCal = ((cumulative / total) * 100d);
             if(progressCal >= progress){
+                String processCalStr = "" + progressCal;
+                this.consoleAppend(processCalStr.substring(0, processCalStr.indexOf("."))+"%");
                 progress = progress + 5;
                 progress = progress > progressCal ? progress : progressCal;
-                this.consoleAppend(progress+"%");
             }
         }
-        this.consoleAppend("100%");
         outstream.flush();
     }
     
@@ -274,7 +273,7 @@ public class JSCHClient {
     }
     
     public static void main(String[] args) {
-        
+        calTest();if(true)return;
         JSCHClient sc = new JSCHClient(null);
         try {
             //sc.connect("192.168.10.129", "root", "root");
@@ -344,6 +343,24 @@ public class JSCHClient {
         }finally{
             sc.close();
             logger.info("sc.close();");
+        }
+    }
+    
+    private static void calTest(){
+        double total = 1024d * 1024d * 50d;//文件总大小
+        double cumulative = 0d;//累计
+        double progress = 0.00d;//进度
+        double progressCal = 0.00d;
+        int n = 1024;
+        while (cumulative < total) {
+            cumulative = cumulative + n;
+            progressCal = ( cumulative / total ) * 100d;
+            if(progressCal >= progress){
+                String processCalStr = ""+progressCal;
+                System.out.println(processCalStr.substring(0, processCalStr.indexOf(".")));
+                progress = progress + 5;
+                progress = progress > progressCal ? progress : progressCal;
+            }
         }
     }
 }

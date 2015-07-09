@@ -15,4 +15,6 @@ set path=.;%fdc_base_dir%;%fdc_base_dir%jre\\bin\\;
 ::java com.fortappend.SwingClient true zhangke 192.168.82.16 22 ~/ $00521B692$1351713120505256$
 java com.fortappend.SwingClient true %fdc_account% %fdc_ip% %fdc_port% %fdc_target_path% %fdc_asset_cn_arr%
 
-pause
+::pause
+
+exit

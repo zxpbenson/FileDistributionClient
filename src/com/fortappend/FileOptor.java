@@ -195,6 +195,7 @@ public class FileOptor {
     }
     
     private long localFileSize;
+    private String fileName;
     private String uploadFile(String account, String localFilePath) throws Exception{
         File file = new File(localFilePath);
         if(!file.exists() || file.isDirectory()){
@@ -202,6 +203,7 @@ public class FileOptor {
             throw new Exception();
         }
         localFileSize = file.length();
+        fileName = file.getName();
         String tempFilePath = "/tmp/fort_append/"+account+"/"+System.currentTimeMillis();
         consoleAppend("开始将本地文件["+localFilePath+"]缓存至堡垒机...");
         sc.close(2);
@@ -214,7 +216,7 @@ public class FileOptor {
         sc.shell("sh\n");
         
         String charSet = "UTF-8";
-        String[] appendPrompt = new String[]{"# ", "assword: ","lost connection","Connection refused"};
+        String[] appendPrompt = new String[]{"# ", "assword: ","lost connection","Connection refused","Are you sure you want to continue connecting (yes/no)?"};
         PromptMatcher pMatcher = new PromptMatcher(){
             public boolean match(String echo, String prompt){
                 if( echo.endsWith(prompt))return true;
@@ -226,14 +228,28 @@ public class FileOptor {
             }
         };
         EchoMatcher[] eMatcherArr = new EchoMatcher[]{new EchoMatcher(){
-        	public boolean match(String echo){
-        		String echoTrim = echo.trim();
-        		if(echoTrim.endsWith(" ETA")){
-        			consoleAppend(echo);
-        			return true;
-        		}
-        		return false;
-        	}
+            public boolean match(String echo){
+                String echoTrim = echo.trim();
+                if(echoTrim.endsWith(" ETA")){
+                    String[] splitArr = echoTrim.split(" ");
+                    int max = 0;
+                    for(String split : splitArr){
+                        if(split.endsWith("%")){
+                            split = split.replace("%", "");
+                            try{
+                                int cur = Integer.valueOf(split);
+                                max = max > cur ? max : cur;
+                            }catch(Exception e){
+                                logger.error(e);
+                            }
+                        }
+                    }
+                    logger.debug(echoTrim);
+                    consoleAppend(max+"%");
+                    return true;
+                }
+                return false;
+            }
         }};
         
         for(String[] asset : assetArr){
@@ -259,7 +275,7 @@ public class FileOptor {
             Thread.sleep(300);
             
             boolean addKnownhost = false;
-            if(echo.indexOf("Are you sure you want to continue connecting")>0){
+            if(echo.indexOf("Are you sure you want to continue connecting")>=0){
                 echo = sc.shell("yes\n");
                 logger.info(echo);
                 //consoleAppend(echo);
@@ -283,28 +299,48 @@ public class FileOptor {
                 //consoleAppend(echo);
             }
             
-            String lowerCase = echo.toLowerCase();
-            if(lowerCase.indexOf("not a directory") >= 0 || lowerCase.indexOf("no such file or directory") >= 0){
-                logger.info(echo);
-                consoleAppend("Not a directory : " + asset[3] + "@" + asset[1] + ":" + targetPath);
-            }
-            
-            if(lowerCase.indexOf("permission denied") >= 0){
-                logger.info(echo);
-                consoleAppend("Permission denied : " + asset[3] + "@" + asset[1] + ":" + targetPath);
-            }
-            
-            if(lowerCase.indexOf("lost connection") >= 0){
-                logger.info(echo);
-                consoleAppend("Lost connection : " + asset[3] + "@" + asset[1]);
-            }
-            
-            if(lowerCase.indexOf("connection refused") >= 0){
-                logger.info(echo);
-                consoleAppend("Connection refused : " + asset[3] + "@" + asset[1]);
-            }
+            echoTip(echo, asset, targetPath);
         }
         consoleAppend("文件纷发执行完毕;");
+    }
+    
+    private void echoTip(String echo, String[] asset, String targetPath){
+        String lowerCase = echo.toLowerCase();
+        
+        if(lowerCase.indexOf("is a directory") >= 0){
+            logger.info(echo);
+            consoleAppend("Is a directory , unexpected path : " + asset[3] + "@" + asset[1] + ":" + targetPath);
+        }
+        
+        if(lowerCase.indexOf("syntax error") >= 0){
+            logger.info(echo);
+            consoleAppend("Syntax error , unexpected file name : " + asset[3] + "@" + asset[1] + "\\" + fileName);
+        }
+        
+        if(lowerCase.indexOf("not a directory") >= 0){
+            logger.info(echo);
+            consoleAppend("Not a directory : " + asset[3] + "@" + asset[1] + ":" + targetPath);
+        }
+        
+        if(lowerCase.indexOf("no such file or directory") >= 0){
+            logger.info(echo);
+            consoleAppend("No such file or directory : " + asset[3] + "@" + asset[1] + ":" + targetPath);
+        }
+        
+        if(lowerCase.indexOf("permission denied") >= 0){
+            logger.info(echo);
+            consoleAppend("Permission denied : " + asset[3] + "@" + asset[1] + ":" + targetPath);
+        }
+        
+        if(lowerCase.indexOf("lost connection") >= 0){
+            logger.info(echo);
+            consoleAppend("Lost connection : " + asset[3] + "@" + asset[1]);
+        }
+        
+        if(lowerCase.indexOf("connection refused") >= 0){
+            logger.info(echo);
+            consoleAppend("Connection refused : " + asset[3] + "@" + asset[1]);
+        }
     }
     
     //检查磁盘剩余空间 df -l | grep -n '/$' | awk '{print $4}'
@@ -423,5 +459,27 @@ public class FileOptor {
         String[] lineArr = echo.split(""+(char)13);
         if(lineIndex >= lineArr.length)return null;
         return lineArr[lineIndex].trim();
+    }
+    
+    public static void main(String[] args){
+        testBFH();
+    }
+    
+    private static void testBFH(){
+        String echoTrim = "MySQL5.0.rar                                    0%    0     0.0KB/s   --:-- ETA\nMySQL5.0.rar                                   11% 5392KB   5.3MB/s   00:07 ETA\nMySQL5.0.rar                                   19% 8720KB   5.1MB/s   00:07 ETA";
+        String[] splitArr = echoTrim.split(" ");
+        int max = 0;
+        for(String split : splitArr){
+            if(split.endsWith("%")){
+                split = split.replace("%", "");
+                try{
+                    int cur = Integer.valueOf(split);
+                    max = max > cur ? max : cur;
+                }catch(Exception e){
+                    logger.error(e);
+                }
+            }
+        }
+        System.out.println(max+"%");
     }
 }

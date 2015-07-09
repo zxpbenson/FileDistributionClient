@@ -89,12 +89,12 @@
     
     var confirmInfo = "确定向下列主机上传文件？\n\n"
     + linkInfo
-    + "\n点击确定系统自动复制这些主机的序列号到剪贴板。\n"
-    + "请打开批量上传客户端将剪贴板中的内容复制到[目标主机]选项。\n"
-    + "目前仅支持向Unix类或者Linux类主机批量传送文件。";
+    + "\n目前仅支持向Unix类或者Linux类主机批量传送文件。";
+//    + "\n点击确定系统自动复制这些主机的序列号到剪贴板。\n"
+//    + "请打开批量上传客户端将剪贴板中的内容复制到[目标主机]选项。\n"
     
     if(confirm(confirmInfo)){
-        alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
+        //alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
     	//window.clipboardData.setData("text",authorize_list);
     	batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
     }
