@@ -16,7 +16,7 @@ dhtmlxTree是树形组件的第三方支持工具
 
 部署时客户端的目录结构为
 
-D:\FileDistributionClient
+C:\FileDistributionClient
     jre
     FileDistributionClient.jar
     jsch-0.1.51.jar
@@ -31,3 +31,41 @@ D:\FileDistributionClient\jre\lib\security\java.policy
   permission java.io.FilePermission "<<ALL FILES>>", "read";
 这一行后面加上
   permission java.io.FilePermission "<<ALL FILES>>", "write";
+
+---------------------------------------------------------------------
+最后的部署方案是制作安装包
+
+首先准备如下内容
+C:\FileDistributionClient
+    jre
+    FileDistributionClient.jar
+    jsch-0.1.51.jar
+    log4j-api-2.1.jar
+    log4j-core-2.1.jar
+    run.bat
+    log4j2.xml
+然后用SmartInstallMaker打开/FileDistributionClient/refer/FileDistributionClient.smm
+点击制作安装包
+然后将生成的exe程序FileDistributionClient.1.0.1.exe压缩为FileDistributionClient.1.0.1.zip
+在准备如下内容
+C:\upload
+    dhtmlxTree
+    catch_pwd.jar
+    download.jsp
+    favorites.jsp
+    FortService
+    FortService.jar
+    list_account.jsp
+    FileDistributionClient.1.0.1.zip
+然后以root用户连接到堡垒
+mkdir FileDistributionClient
+将上面准备的文件用winscp传到/root/FileDistributionClient目录下
+tar -czvf fort.append.1.0.1.tar fort.append.1.0.1 
+生成fort.append.1.0.1.tar
+最终的交付物品为
+fort.append.1.0.1.tar
+fort.append.1.0.1.install.sh
+    
+
+
+

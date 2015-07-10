@@ -93,10 +93,26 @@
 //    + "\n点击确定系统自动复制这些主机的序列号到剪贴板。\n"
 //    + "请打开批量上传客户端将剪贴板中的内容复制到[目标主机]选项。\n"
     
+    var cmdStrForSwing = ""
+        + "C: \n"
+        + "cd C:\FileDistributionClient\n"
+        + "set fdc_account="+userAccount+"\n"
+        + "set fdc_ip="+serverHost+"\n"
+        + "set fdc_port=22\n"
+        + "set fdc_target_path=~/\n"
+        + "set fdc_asset_cn_arr="+authorize_list+"\n";
+        + "set JAVA_OPTS=-client -Xms32M -Xmx128M -XX:PermSize=16M -XX:MaxPermSize=64M\n"
+        + "set fdc_base_dir=C:\\FileDistributionClient\\ \n";
+        + "set classpath=.;%fdc_base_dir%jre\\lib\\rt.jar;%fdc_base_dir%jsch-0.1.51.jar;%fdc_base_dir%log4j-api-2.1.jar;%fdc_base_dir%log4j-core-2.1.jar;%fdc_base_dir%FileDistributionClient.jar;\n";
+        + "set path=.;%fdc_base_dir%;%fdc_base_dir%jre\\bin\\;\n";
+        + "java %JAVA_OPTS% com.fortappend.SwingClient true %fdc_account% %fdc_ip% %fdc_port% %fdc_target_path% %fdc_asset_cn_arr%\n";
+        + "exit\n";
+    
     if(confirm(confirmInfo)){
         //alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
     	//window.clipboardData.setData("text",authorize_list);
-    	batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+        //batActiveXObject.run(cmdStrForSwing, 0);
     }
     //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
     //for(var j = 0; j < nameArr.length; j++){

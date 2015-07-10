@@ -307,6 +307,11 @@ public class FileOptor {
     private void echoTip(String echo, String[] asset, String targetPath){
         String lowerCase = echo.toLowerCase();
         
+        if(lowerCase.indexOf("operation not applicable") >= 0){
+            logger.info(echo);
+            consoleAppend("Operation not applicable : " + asset[3] + "@" + asset[1] + ":" + targetPath);
+        }
+        
         if(lowerCase.indexOf("is a directory") >= 0){
             logger.info(echo);
             consoleAppend("Is a directory , unexpected path : " + asset[3] + "@" + asset[1] + ":" + targetPath);

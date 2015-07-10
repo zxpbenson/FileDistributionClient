@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 //import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -164,6 +165,8 @@ public class SwingClient {
         //
         // //this.jFrame.setJMenuBar(jmb);
         
+        this.jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        
         this.jFrame.setIconImage(img_1);
         this.jFrame.setLayout(new BorderLayout(2, 3));
         this.jFrame.setSize(560, 560);
@@ -239,6 +242,8 @@ public class SwingClient {
 
         this.jFrame.setVisible(true);
         this.jFrame.repaint();
+        
+        this.jFrame.repaint(1000);
 
     }
 

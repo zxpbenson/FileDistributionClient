@@ -12,7 +12,7 @@
     while(requestParameterNames.hasMoreElements()){
         String parameterName = (String)requestParameterNames.nextElement();
         Object parameterValue = request.getParameter(parameterName);
-        request.getAttribute("request parameter parameter=" + parameterName + ", parameter=" + parameterValue);
+        System.out.println("request parameter parameter=" + parameterName + ", parameter=" + parameterValue);
         
     }
     
@@ -20,7 +20,7 @@
     while(requestAttributeNames.hasMoreElements()){
         String attributeName = (String)requestAttributeNames.nextElement();
         Object attributeValue = request.getAttribute(attributeName);
-        request.getAttribute("request attribute attributeName=" + attributeName + ", attributeValue=" + attributeValue);
+        System.out.println("request attribute attributeName=" + attributeName + ", attributeValue=" + attributeValue);
         
     }
     
@@ -33,7 +33,7 @@
     while(sessionAttributeNames.hasMoreElements()){
         String attributeName = (String)sessionAttributeNames.nextElement();
         Object attributeValue = session.getAttribute(attributeName);
-        request.getAttribute("session attribute attributeName=" + attributeName + ", attributeValue=" + attributeValue);
+        System.out.println("session attribute attributeName=" + attributeName + ", attributeValue=" + attributeValue);
         
     }
 	
