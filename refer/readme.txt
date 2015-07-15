@@ -26,7 +26,7 @@ C:\FileDistributionClient
     log4j2.xml
 
 修改
-D:\FileDistributionClient\jre\lib\security\java.policy
+C:\FileDistributionClient\jre\lib\security\java.policy
 在
   permission java.io.FilePermission "<<ALL FILES>>", "read";
 这一行后面加上
@@ -47,7 +47,7 @@ C:\FileDistributionClient
 然后用SmartInstallMaker打开/FileDistributionClient/refer/FileDistributionClient.smm
 点击制作安装包
 然后将生成的exe程序FileDistributionClient.1.0.1.exe压缩为FileDistributionClient.1.0.1.zip
-在准备如下内容
+再准备如下内容
 C:\upload
     dhtmlxTree
     catch_pwd.jar
@@ -58,14 +58,14 @@ C:\upload
     list_account.jsp
     FileDistributionClient.1.0.1.zip
 然后以root用户连接到堡垒
-mkdir FileDistributionClient
-将上面准备的文件用winscp传到/root/FileDistributionClient目录下
+mkdir fort.append.1.0.1
+将上面准备的文件用winscp传到/root/fort.append.1.0.1目录下
 tar -czvf fort.append.1.0.1.tar fort.append.1.0.1 
 生成fort.append.1.0.1.tar
 最终的交付物品为
 fort.append.1.0.1.tar
 fort.append.1.0.1.install.sh
-    
+fort.append.1.0.1.uninstall.sh
 
 
 
