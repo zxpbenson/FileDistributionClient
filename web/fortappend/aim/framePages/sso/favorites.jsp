@@ -111,7 +111,11 @@
     if(confirm(confirmInfo)){
         //alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
     	//window.clipboardData.setData("text",authorize_list);
-        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+    	try{
+	        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+    	}catch(ex){
+    	    alert("请确认是否已经正确安装文件批量上传客户端");
+    	}
         //batActiveXObject.run(cmdStrForSwing, 0);
     }
     //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
