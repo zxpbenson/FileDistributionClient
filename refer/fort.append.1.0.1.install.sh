@@ -4,6 +4,11 @@ echo "FortAppend install starting..."
 
 cd /root/
 
+if [ ! -f "/root/fort.append.1.0.1.tar" ]; then
+  echo "Installer resource not exists."
+  exit
+fi
+
 if [ -d "/usr/local/fort_append" ]; then
   echo "FortAppend already install."
   exit
@@ -11,6 +16,7 @@ fi
 
 mkdir -p /usr/local/fort_append/FortService
 mkdir -p /usr/local/fort_append/backup
+mkdir -p /usr/local/fort_append/log
 
 if [ -d "/root/fort.append.1.0.1" ]; then
   rm -r fort.append.1.0.1
@@ -22,8 +28,14 @@ cd fort.append.1.0.1
 mv catch_pwd.jar /usr/local/fort_append/FortService/
 mv FortService.jar /usr/local/fort_append/FortService/
 
-mv FortService /bin/
+cat FortService | col > /bin/FortService
 chmod +x /bin/FortService
+
+cat StartFortService | col > /bin/StartFortService
+chmod +x /bin/StartFortService
+
+cat StopFortService | col > /bin/StopFortService
+chmod +x /bin/StopFortService
 
 mv dhtmlxTree /usr/local/tomcat/webapps/aim/
 
@@ -40,5 +52,7 @@ mv download.jsp /usr/local/tomcat/webapps/public/download/
 
 cd ..
 rm -r fort.append.1.0.1
+
+StartFortService
 
 echo "FortAppend install successfully."

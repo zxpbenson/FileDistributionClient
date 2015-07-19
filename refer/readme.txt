@@ -51,12 +51,14 @@ C:\FileDistributionClient
 C:\upload
     dhtmlxTree
     catch_pwd.jar
+    FortService.jar
     download.jsp
     favorites.jsp
-    FortService
-    FortService.jar
     list_account.jsp
     FileDistributionClient.1.0.1.zip
+    FortService
+    StartFortService
+    StopFortService
 然后以root用户连接到堡垒
 mkdir fort.append.1.0.1
 将上面准备的文件用winscp传到/root/fort.append.1.0.1目录下

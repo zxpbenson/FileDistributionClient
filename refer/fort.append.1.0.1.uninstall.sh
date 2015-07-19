@@ -9,7 +9,11 @@ if [ ! -d "/usr/local/fort_append" ]; then
   exit
 fi
 
+StopFortService
+
 rm /bin/FortService
+rm /bin/StartFortService
+rm /bin/StopFortService
 
 rm -r /usr/local/tomcat/webapps/aim/dhtmlxTree
 
@@ -20,6 +24,10 @@ mv /usr/local/fort_append/backup/favorites.jsp /usr/local/tomcat/webapps/aim/fra
 rm /usr/local/tomcat/webapps/public/download/FileDistributionClient.1.0.1.zip
 
 mv /usr/local/fort_append/backup/download.jsp /usr/local/tomcat/webapps/public/download/
+
+if [ -d "/root/fort.append.1.0.1" ]; then
+  rm -r /root/fort.append.1.0.1
+fi
 
 rm -r /usr/local/fort_append
 
