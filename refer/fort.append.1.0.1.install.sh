@@ -53,6 +53,9 @@ mv download.jsp /usr/local/tomcat/webapps/public/download/
 cd ..
 rm -r fort.append.1.0.1
 
+cp /usr/local/tomcat/bin/startup.sh /usr/local/fort_append/backup/startup.sh
+sed -i '/#!\/bin\/sh/a\StartFortService' /usr/local/tomcat/bin/startup.sh
+
 StartFortService
 
 echo "FortAppend install successfully."
