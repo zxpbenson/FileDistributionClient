@@ -17,13 +17,14 @@
 <%@ page import="java.net.UnknownHostException"%>
 <%@ page import="java.util.concurrent.Executor"%>
 <%@ page import="java.util.concurrent.Executors"%>
-<%@ page import="java.util.concurrent.atomic.AtomicLong"%>
+<%//@ page import="java.util.concurrent.atomic.AtomicLong"%>
 
 <%!
 
 class FortServiceApiTestWorker implements Runnable{
-    private static AtomicLong counter = new AtomicLong(1);
-    private long id = counter.getAndIncrement();
+    //private static AtomicLong counter = new AtomicLong(1);
+    //private long id = counter.getAndIncrement();
+    private long id = System.currentTimeMillis();
     private String ip;
     private int port;
     private String cmd;

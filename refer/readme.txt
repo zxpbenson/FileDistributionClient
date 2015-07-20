@@ -69,5 +69,9 @@ fort.append.1.0.1.tar
 fort.append.1.0.1.install.sh
 fort.append.1.0.1.uninstall.sh
 
-
+安装
+chmod +x fort.append.1.0.1.*.sh
+nohup ./fort.append.1.0.1.install.sh > fort.append.install.log 2>&1 &
+卸载
+nohup ./fort.append.1.0.1.uninstall.sh > fort.append.uninstall.log 2>&1 &
 
