@@ -92,7 +92,8 @@ class FortServiceApiTestWorker implements Runnable{
     }
 
     private void request(String request) throws IOException{
-        bw.write(request + "\n");
+        bw.write(request);
+        bw.newLine();
         bw.flush();
     }
 
@@ -346,7 +347,7 @@ System.out.println("====>>>userId="+userId+";assetRdn="+a.getId());
 //List[] echoListArr = new Cmd().execCmdsInProcess(new String[]{"/bin/sh"}, null, null, new String[]{"FortService Role " + userId + " " + a.getId() + " true", "exit"}, 1);
 //String echo = (String)echoListArr[0].get(0);
 
-FortServiceApiTestWorker worker = new FortServiceApiTestWorker("127.0.0.1", 9777, "FortService Role " + userId + " " + a.getId() + " true");
+FortServiceApiTestWorker worker = new FortServiceApiTestWorker("127.0.0.1", 9777, "Role " + userId + " " + a.getId() + " true");
 worker.run();
 String echo = worker.getResponse();
 if(echo == null)echo = "";

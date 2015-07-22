@@ -69,9 +69,17 @@ fort.append.1.0.1.tar
 fort.append.1.0.1.install.sh
 fort.append.1.0.1.uninstall.sh
 
-安装
-chmod +x fort.append.1.0.1.*.sh
-nohup ./fort.append.1.0.1.install.sh > fort.append.install.log 2>&1 &
-卸载
-nohup ./fort.append.1.0.1.uninstall.sh > fort.append.uninstall.log 2>&1 &
+安装时可能会因为脚本上传改变编码
+用下面的命令可以修正此问题
+cat fort.append.1.0.1.install.sh | col > fort.append.1.0.1.install.filted.sh
+cat fort.append.1.0.1.uninstall.sh | col > fort.append.1.0.1.uninstall.filted.sh
 
+安装
+chmod +x fort.append.1.0.1.*.filted.sh
+nohup ./fort.append.1.0.1.install.filted.sh > fort.append.install.log 2>&1 &
+卸载
+nohup ./fort.append.1.0.1.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
+
+设置IE
+工具 -> Internet 选项 -> 安全 -> 自定义级别 -> ActiveX 控件和插件
+这个项目下所有内容选启用或者允许
