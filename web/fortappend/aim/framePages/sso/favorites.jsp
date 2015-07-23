@@ -44,6 +44,19 @@
     var serverHost = document.domain;
     var userAccount = "<%=proxyUser.getId()%>";
     
+    function is64or32(){
+        var agent=navigator.userAgent.toLowerCase();
+        //alert(navigator.userAgent);
+        //alert(navigator.cpuClass);
+        if(agent.indexOf("win64")>=0||agent.indexOf("wow64")>=0){
+            //return "x64";
+	        return 64;
+        }
+        //return navigator.cpuClass;
+        return 32;
+    }
+    
+    
 	function copy_batchupload_link(){
 		var linkInfo = "";
     var authorize_list = "$";
@@ -62,6 +75,11 @@
 			var tds = tr.getElementsByTagName("td");
 			if (tds.length < 7) {
 				continue;
+			}
+			
+			var styleDispaly = tr.style.display;
+			if(styleDispaly == "none"){
+			    continue;
 			}
 			
 			var seq = chks[i].value;
@@ -112,7 +130,7 @@
         //alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
     	//window.clipboardData.setData("text",authorize_list);
     	try{
-	        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+"\n",0);  
+	        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+" "+is64or32()+"\n",0);  
     	}catch(ex){
     	    alert("请确认是否已经正确安装文件批量上传客户端");
     	}

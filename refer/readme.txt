@@ -37,7 +37,8 @@ C:\FileDistributionClient\jre\lib\security\java.policy
 
 首先准备如下内容
 C:\FileDistributionClient
-    jre
+    jre32
+    jre64
     FileDistributionClient.jar
     jsch-0.1.51.jar
     log4j-api-2.1.jar
