@@ -70,6 +70,8 @@ fort.append.1.0.1.tar
 fort.append.1.0.1.install.sh
 fort.append.1.0.1.uninstall.sh
 
+---------------------------------------------------------------------
+
 安装时可能会因为脚本上传改变编码
 用下面的命令可以修正此问题
 cat fort.append.1.0.1.install.sh | col > fort.append.1.0.1.install.filted.sh
