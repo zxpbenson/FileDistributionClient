@@ -12,5 +12,5 @@ set classpath=.;%fdc_base_dir%jre%fdc_bit%\\lib\\rt.jar;%fdc_base_dir%jsch-0.1.5
 set path=.;%fdc_base_dir%;%fdc_base_dir%jre%fdc_bit%\\bin\\;
 java %JAVA_OPTS% com.fortappend.SwingClient true %fdc_account% %fdc_ip% %fdc_port% %fdc_target_path% %fdc_asset_cn_arr%
 exit
-::java com.fortappend.SwingClient true zhangke 192.168.82.16 22 ~/ $00521B692$1351713120505256$
+::java com.fortappend.SwingClient true zhangke 192.168.82.16 22 ~/ $00521B692$1351713120505256$ 64
 ::pause
