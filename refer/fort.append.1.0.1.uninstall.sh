@@ -32,6 +32,23 @@ if [ -d "/root/fort.append.1.0.1" ]; then
   rm -r /root/fort.append.1.0.1
 fi
 
+TomcatPID=`ps -ef | grep org.apache.catalina.startup.Bootstrap | grep java | awk '{print $2}'`
+
+if [ -z $TomcatPID ] ; then
+  echo "Tomcat process not exists."
+else
+  kill $TomcatPID
+  echo "Tomcat process stop successfully."
+fi
+
+if [ -d "/usr/local/tomcat/work/Catalina" ]; then
+  rm -r /usr/local/tomcat/work/Catalina
+  echo "Clean Tomcat cache successfully."
+fi
+
+/usr/local/tomcat/bin/startup.sh
+echo "Tomcat restart successfully."
+
 rm -r /usr/local/fort_append
 
 echo "FortAppend uninstall successfully."
