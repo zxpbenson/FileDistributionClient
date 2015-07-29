@@ -86,3 +86,7 @@ nohup ./fort.append.1.0.1.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
 设置IE
 工具 -> Internet 选项 -> 安全 -> 自定义级别 -> ActiveX 控件和插件
 这个项目下所有内容选启用或者允许
+如果下载客户端存在卡在99%不动的情况
+工具 -> Internet 选项 -> 高级 -> 检查下载程序的签名
+或者用fort.simp.com域名访问就能解决此问题
+
