@@ -1,0 +1,5 @@
+  // add by benson, not sure...
+  permission java.util.PropertyPermission "user.dir", "read"; 
+  permission java.io.FilePermission "<<ALL FILES>>", "read";
+  permission java.io.FilePermission "<<ALL FILES>>", "write";
+  permission java.security.AllPermission;
