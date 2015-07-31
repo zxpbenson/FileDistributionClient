@@ -31,7 +31,7 @@ C:\FileDistributionClient\jre\lib\security\java.policy
   permission java.io.FilePermission "<<ALL FILES>>", "read";
 这一行后面加上
   permission java.io.FilePermission "<<ALL FILES>>", "write";
-上面是针对64位jre的修改，32位的在java.policy最后一个}之前加上下面这四行，是否有效未验证
+上面是针对64位jre的修改，32位的在java.policy最后一个}之前加上下面这四行，在64位环境做过验证。
     // add by benson, not sure...
   permission java.util.PropertyPermission "user.dir", "read"; 
   permission java.io.FilePermission "<<ALL FILES>>", "read";
