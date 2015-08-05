@@ -81,9 +81,9 @@ fort.append.1.0.1.uninstall.sh
 用下面的命令可以修正此问题
 cat fort.append.1.0.1.install.sh | col > fort.append.1.0.1.install.filted.sh
 cat fort.append.1.0.1.uninstall.sh | col > fort.append.1.0.1.uninstall.filted.sh
+chmod +x fort.append.1.0.1.*.filted.sh
 
 安装
-chmod +x fort.append.1.0.1.*.filted.sh
 nohup ./fort.append.1.0.1.install.filted.sh > fort.append.install.log 2>&1 &
 卸载
 nohup ./fort.append.1.0.1.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
