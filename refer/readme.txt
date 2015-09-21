@@ -73,7 +73,7 @@ C:\upload
 然后以root用户连接到堡垒
 mkdir fort.append.1.1.0
 将上面准备的文件用winscp传到/root/fort.append.1.1.0目录下
-tar -czvf fort.append.1.1.0.tar fort.append.1.1.0 
+tar -czvf fort.append.1.1.0.tar fort.append.1.1.0
 生成fort.append.1.1.0.tar
 最终的交付物品为
 fort.append.1.1.0.tar

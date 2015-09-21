@@ -14,7 +14,8 @@ if [ -d "/usr/local/fort_append" ]; then
   exit
 fi
 
-mkdir -p /usr/local/fort_append/FortService
+mkdir -p /usr/local/fort_append/bin
+mkdir -p /usr/local/fort_append/lib
 mkdir -p /usr/local/fort_append/backup
 mkdir -p /usr/local/fort_append/log
 mkdir -p /usr/local/fort_append/conf
@@ -29,19 +30,25 @@ cd fort.append.1.1.0
 
 #mv catch_pwd.jar /usr/local/fort_append/FortService/
 #mv FortService.jar /usr/local/fort_append/FortService/
-mv *.jar /usr/local/fort_append/FortService/
+mv *.jar /usr/local/fort_append/lib/
 
 mv fort.append.s3db /usr/local/fort_append/db/
-mv itil.control.cnf /usr/local/fort_append/conf/			
+mv itil.control.cnf /usr/local/fort_append/conf/
 
 cat FortService | col > /bin/FortService
 chmod +x /bin/FortService
 
-cat StartFortService | col > /bin/StartFortService
-chmod +x /bin/StartFortService
+cat StartFortService | col > /usr/local/fort_append/bin/StartFortService
+chmod +x /usr/local/fort_append/bin/StartFortService
 
-cat StopFortService | col > /bin/StopFortService
-chmod +x /bin/StopFortService
+cat StopFortService | col > /usr/local/fort_append/bin/StopFortService
+chmod +x /usr/local/fort_append/bin/StopFortService
+
+cat StatusFortService | col > /usr/local/fort_append/bin/StatusFortService
+chmod +x /usr/local/fort_append/bin/StatusFortService
+
+cat FortServiceServer | col > /etc/init.d/FortServiceServer
+chmod +x /etc/init.d/FortServiceServer
 
 mv dhtmlxTree /usr/local/tomcat/webapps/aim/
 
@@ -64,8 +71,9 @@ rm -rf fort.append.1.1.0
 #sed -i '/#!\/bin\/sh/a\StartFortService' /usr/local/tomcat/bin/catalina.sh
 
 # *** install rccron auto start StartFortService ***
-
-StartFortService
+update-rc.d FortServiceServer start
+#StartFortService
+service FortServiceServer start
 
 TomcatPID=`ps -ef | grep org.apache.catalina.startup.Bootstrap | grep java | awk '{print $2}'`
 

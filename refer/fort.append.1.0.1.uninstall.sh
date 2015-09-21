@@ -10,7 +10,7 @@ if [ ! -d "/usr/local/fort_append" ]; then
 fi
 
 #sed -i 's/StartFortService//g' /usr/local/tomcat/bin/startup.sh
-mv /usr/local/fort_append/backup/startup.sh /usr/local/tomcat/bin/startup.sh
+#mv /usr/local/fort_append/backup/startup.sh /usr/local/tomcat/bin/startup.sh
 
 StopFortService
 

@@ -14,12 +14,14 @@ fi
 #mv /usr/local/fort_append/backup/catalina.sh /usr/local/tomcat/bin/catalina.sh
 
 # *** uninstall rccron auto start StartFortService ***
-
-StopFortService
+service FortServiceServer stop
+update-rc.d FortServiceServer stop
+#StopFortService
 
 rm -rf /bin/FortService
-rm -rf /bin/StartFortService
-rm -rf /bin/StopFortService
+#rm -rf /bin/StartFortService
+#rm -rf /bin/StopFortService
+rm -rf /etc/init.d/FortServiceServer
 
 rm -rf /usr/local/tomcat/webapps/aim/dhtmlxTree
 
