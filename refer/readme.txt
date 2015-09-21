@@ -1,4 +1,4 @@
-﻿依靠bat文件运行本工程导出生成的jar包FileDistributionClient.jar和依赖包jsch-0.1.51.jar
+依靠bat文件运行本工程导出生成的jar包FileDistributionClient.jar和依赖包jsch-0.1.51.jar
 
 覆盖之前先对比堡垒机上的favorites.jsp文件和本地的favorites.jsp文件是否存在差异
 将web/fortappend目录下的aim文件夹覆盖堡垒主机/usr/local/tomcat/webapps/aim文件夹
@@ -58,6 +58,11 @@ C:\upload
     dhtmlxTree
     catch_pwd.jar
     FortService.jar
+    FortServiceClient-1.1.0.jar
+    gson-2.2.4.jar
+    sqlitejdbc-v056.jar
+    fort.append.s3db
+    itil.control.cnf
     download.jsp
     favorites.jsp
     list_account.jsp
@@ -66,27 +71,27 @@ C:\upload
     StartFortService
     StopFortService
 然后以root用户连接到堡垒
-mkdir fort.append.1.0.1
-将上面准备的文件用winscp传到/root/fort.append.1.0.1目录下
-tar -czvf fort.append.1.0.1.tar fort.append.1.0.1 
-生成fort.append.1.0.1.tar
+mkdir fort.append.1.1.0
+将上面准备的文件用winscp传到/root/fort.append.1.1.0目录下
+tar -czvf fort.append.1.1.0.tar fort.append.1.1.0 
+生成fort.append.1.1.0.tar
 最终的交付物品为
-fort.append.1.0.1.tar
-fort.append.1.0.1.install.sh
-fort.append.1.0.1.uninstall.sh
+fort.append.1.1.0.tar
+fort.append.1.1.0.install.sh
+fort.append.1.1.0.uninstall.sh
 
 ---------------------------------------------------------------------
 
 安装时可能会因为脚本上传改变编码
 用下面的命令可以修正此问题
-cat fort.append.1.0.1.install.sh | col > fort.append.1.0.1.install.filted.sh
-cat fort.append.1.0.1.uninstall.sh | col > fort.append.1.0.1.uninstall.filted.sh
-chmod +x fort.append.1.0.1.*.filted.sh
+cat fort.append.1.1.0.install.sh | col > fort.append.1.1.0.install.filted.sh
+cat fort.append.1.1.0.uninstall.sh | col > fort.append.1.1.0.uninstall.filted.sh
+chmod +x fort.append.1.1.0.*.filted.sh
 
 安装
-nohup ./fort.append.1.0.1.install.filted.sh > fort.append.install.log 2>&1 &
+nohup ./fort.append.1.1.0.install.filted.sh > fort.append.install.log 2>&1 &
 卸载
-nohup ./fort.append.1.0.1.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
+nohup ./fort.append.1.1.0.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
 
 设置IE
 工具 -> Internet 选项 -> 安全 -> 自定义级别 -> ActiveX 控件和插件
