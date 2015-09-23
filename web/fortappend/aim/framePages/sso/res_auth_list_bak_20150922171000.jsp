@@ -1,138 +1,5 @@
 <%@ page language="java" pageEncoding="GBK"%>
 <%@taglib uri="SimpTags" prefix="simp"%>
-<%@ page import="com.simp.action.ProxyUser" %>
-
-<%@ page import="java.io.BufferedReader"%>
-<%@ page import="java.io.BufferedWriter"%>
-<%@ page import="java.io.IOException"%>
-<%@ page import="java.io.InputStream"%>
-<%@ page import="java.io.InputStreamReader"%>
-<%@ page import="java.io.OutputStream"%>
-<%@ page import="java.io.OutputStreamWriter"%>
-<%@ page import="java.net.Socket"%>
-<%@ page import="java.net.UnknownHostException"%>
-<%//@ page import="java.util.concurrent.atomic.AtomicLong"%>
-
-<%!
-class FortServiceApiTestWorker implements Runnable{
-    //private static AtomicLong counter = new AtomicLong(1);
-    //private long id = counter.getAndIncrement();
-    private long id = System.currentTimeMillis();
-    private String ip;
-    private int port;
-    private String cmd;
-    private Socket socket;
-    private InputStream is;
-    private InputStreamReader isr;
-    private BufferedReader br;
-    private OutputStream os;
-    private OutputStreamWriter osw;
-    private BufferedWriter bw;
-    private String response;
-    
-    public FortServiceApiTestWorker(String ip, int port, String cmd){
-        this.ip = ip;
-        this.port = port;
-        this.cmd = cmd;
-    }
-    
-    public void run(){
-        try {
-            openIO();
-            work();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }  catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            closeIO();
-        }
-    }
-    
-    private void openIO() throws UnknownHostException, IOException{
-        socket = new Socket(ip, port);
-        
-        is = socket.getInputStream();
-        isr = new InputStreamReader(is);
-        br = new BufferedReader(isr);
-        
-        os = socket.getOutputStream();
-        osw = new OutputStreamWriter(os);
-        bw = new BufferedWriter(osw);
-    }
-    
-    private void closeIO(){
-        if(br != null)try{br.close();}catch(IOException e){}
-        if(isr != null)try{isr.close();}catch(IOException e){}
-        if(is != null)try{is.close();}catch(IOException e){}
-        
-        if(bw != null)try{bw.close();}catch(IOException e){}
-        if(osw != null)try{osw.close();}catch(IOException e){}
-        if(os != null)try{os.close();}catch(IOException e){}
-            
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void work() throws IOException{
-        System.out.println("FortServiceApiTestWorker " + id + " send request : " + cmd);
-        request(cmd);
-        response = br.readLine();
-        System.out.println("FortServiceApiTestWorker " + id + " get response : " + response);
-    }
-
-    private void request(String request) throws IOException{
-        bw.write(request);
-        bw.newLine();
-        bw.flush();
-    }
-
-    public String getResponse() {
-        return response;
-    }
-    
-}
-
-%>
-<%
-String userId = ProxyUser.getProxyUser(request).getId();
-System.out.println("====>>>userId="+userId);
-
-String itilFilter = "0";
-String whiteList = "";
-String itilAuth = "";
-
-FortServiceApiTestWorker workerForItilFilter = new FortServiceApiTestWorker("127.0.0.1", 9777, "Config itil_filter true");
-workerForItilFilter.run();
-itilFilter = workerForItilFilter.getResponse();
-if(itilFilter == null)itilFilter = "0";
-
-if("1".equals(itilFilter)){
-    FortServiceApiTestWorker workerForWhiteList = new FortServiceApiTestWorker("127.0.0.1", 9777, "Config white_list true");
-    workerForWhiteList.run();
-    whiteList = workerForWhiteList.getResponse();
-    if(whiteList == null)whiteList = "";
-    String[] whiteListArr = whiteList.split(",");
-    if(whiteListArr == null)whiteListArr = new String[0];
-    boolean inWhiteList = false;
-    for(String whiteName : whiteListArr){
-        if(whiteName.equals(userId)){
-            inWhiteList = true;
-            break;
-        }
-    }
-    if(!inWhiteList){
-        FortServiceApiTestWorker workerForItilAuth = new FortServiceApiTestWorker("127.0.0.1", 9777, "{\"personAccount\":\"" + userId + "\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"true\"}");
-        workerForItilAuth.run();
-        itilAuth = workerForItilAuth.getResponse();
-        if(itilAuth == null)itilAuth = "";
-    }
-}
-%>
-
 <html>  
 <head>
 <title></title>
@@ -140,437 +7,12 @@ if("1".equals(itilFilter)){
 <link rel="stylesheet" type="text/css" href='/public/css/button.css'>
 <link rel="stylesheet" type="text/css" href='/public/css/sso.css'>
 <script LANGUAGE="JavaScript" src="/public/js/XmlHttp.js"></script>
-<script type="text/javascript" src="/public/js/CheckIds.js"></script>
 <script LANGUAGE="JavaScript" src="/public/framePages/sso/portal_function.js"></script>
 <script src='/public/script/body_div.js'></script>
-
-  <link rel="STYLESHEET" type="text/css" href="/dhtmlxTree/codebase/dhtmlxtree.css">
-  <script type="text/javascript" src="<simp:PathTag s='/dhtmlxTree/codebase/dhtmlxcommon.js'/>"></script>
-  <script type="text/javascript" src="<simp:PathTag s='/dhtmlxTree/codebase/dhtmlxtree.js'/>"></script>
-  <script type="text/javascript" src="<simp:PathTag s='/dhtmlxTree/codebase/ext/dhtmlxtree_json.js'/>"></script>
-  <script type="text/javascript" src="<simp:PathTag s='/dhtmlxTree/samples/benson/treeclass.js'/>"></script>
-
-<%
-    ProxyUser proxyUser = ProxyUser.getProxyUser(request);
-%>
-
-<script>
-var fa_userId = "<%=userId%>";
-var fa_itilFilter = "<%=itilFilter%>";
-var fa_whiteList = "<%=whiteList%>";
-var fa_itilAuth = "<%=itilAuth%>";
-
-function faStrToDate(fDate){  
-    var fullDate = fDate.split(" ")[0].split("-");  
-    var fullTime = fDate.split(" ")[1].split(":");  
-    return new Date(fullDate[0], fullDate[1]-1, fullDate[2], (fullTime[0] != null ? fullTime[0] : 0), (fullTime[1] != null ? fullTime[1] : 0), (fullTime[2] != null ? fullTime[2] : 0));  
-}
-
-function itilAuthJudge(ip, resAccount){
-    if(fa_itilFilter == "0")return true;//Itil过滤关闭，可以单点登录
-    var whiteNameArr = fa_whiteList.split(",");
-    for(var index = 0; index < whiteNameArr.length; index++){
-        if(whiteNameArr[index] == fa_userId){
-            return true;//在Itil过滤白名单中，可以单点登录
-        }
-    }
-    var itilAuthArr = fa_itilAuth.split(";");
-    for(var index = 0; index < itilAuthArr.length; index++){
-        //alert(itilAuthArr[index]+"\n"+fa_userId+","+ip+","+resAccount+","+"\n"+itilAuthArr[index].indexOf(fa_userId+","+ip+","+resAccount+","));
-        if(itilAuthArr[index].indexOf(fa_userId+","+ip+","+resAccount+",") == 0){//alert("auth record math");
-            var authParmArr = itilAuthArr[index].split(",");
-            var startDatetime = faStrToDate(""+authParmArr[3]);
-            var endDatetime = faStrToDate(""+authParmArr[4]);
-            var currentDatetime = new Date();
-            //alert(""+itilAuthArr[index]+ "\n"+authParmArr[3]+ "\n"+authParmArr[4]+ "\n"+startDatetime.getTime()+ "\n"+currentDatetime.getTime()+ "\n"+endDatetime.getTime()+ "\n"+(startDatetime.getTime() <= currentDatetime.getTime()) + "\n" + (currentDatetime.getTime() <= endDatetime.getTime()));
-            if(startDatetime.getTime() <= currentDatetime.getTime() && currentDatetime.getTime() <= endDatetime.getTime()){
-                return true;//有Itil授权，可以单点登录
-            }
-        }
-    }
-    return false;//没有Itil授权，不可以单点登录
-}
-</script>
-
-<script type="text/javascript">
-	function del(btn){
-	  	if (!is_list_ckb_selected()) {
-			alert("请选择需要删除的自然人.");
-			return;
-		}
-		
-	   	if(!window.confirm('是否确认将已选收藏夹内容从收藏夹中删除?')){
-	           return;
-	       }
-	       
-	       //var xmlHttp=new XmlHttpConstruct("/aim/portal.do", true);		
-		//xmlHttp.send("method=remove_from_favorites&seq="+seq);	
-	       
-		btn.form.action="<simp:PathTag s='/portal.do?method=remove_from_favorites'/>";
-		btn.form.submit();
-	}
-	var batActiveXObject = new ActiveXObject("Wscript.Shell")
-    var serverHost = document.domain;
-    var userAccount = "<%=proxyUser.getId()%>";
-    
-    function is64or32(){
-        var agent=navigator.userAgent.toLowerCase();
-        //alert(navigator.userAgent);
-        //alert(navigator.cpuClass);
-        if(agent.indexOf("win64")>=0||agent.indexOf("wow64")>=0){
-            //return "x64";
-	        return 64;
-        }
-        //return navigator.cpuClass;
-        return 32;
-    }
-    
-    
-	function copy_batchupload_link(){
-		var linkInfo = "";
-    var authorize_list = "$";
-	  var chks = document.getElementsByName("list_ckb");
-		for (var i = 0; i < chks.length; i++) {
-		  if (!chks[i].checked) {
-			  continue;
-			}
-			
-	    var tr = chks[i].parentNode.parentNode;
-			
-			if (tr == null) {
-				continue;
-			}
-			
-			var tds = tr.getElementsByTagName("td");
-			if (tds.length < 7) {
-				continue;
-			}
-			
-			var styleDispaly = tr.style.display;
-			if(styleDispaly == "none"){
-			    continue;
-			}
-			
-			var seq = chks[i].value;
-			var rdn = chks[i].id;
-			var asset = tds[3].innerHTML.replaceAll("&nbsp;", "");
-			var aip = tds[4].innerHTML.replaceAll("&nbsp;", "");
-			var acc = tds[6].innerHTML.replaceAll("&nbsp;", "");
-		  var org = tds[2].innerHTML.replaceAll("&nbsp;", "");
-
-		  //linkInfo = linkInfo + "seq="   + seq   + "\n";
-		  //linkInfo = linkInfo + "rdn="   + rdn   + "\n";
-		  //linkInfo = linkInfo + "asset=" + asset + "\n";
-		  //linkInfo = linkInfo + "aip="   + aip   + "\n";
-		  linkInfo = linkInfo + (i+1) + "," + org   + "\n";
-		  //linkInfo = linkInfo + "acc="   + acc   + "\n\n";
-		  
-      authorize_list = authorize_list + rdn.split(",")[0].split("_")[1] + "$";
-		}
-		//alert(authorize_list);
-    
-    if(linkInfo.length < 1){
-      alert("请选择至少一个主机.");
-      return;
-    }
-    
-    var confirmInfo = "确定向下列主机上传文件？\n\n"
-    + linkInfo
-    + "\n目前仅支持向Unix类或者Linux类主机批量传送文件。";
-//    + "\n点击确定系统自动复制这些主机的序列号到剪贴板。\n"
-//    + "请打开批量上传客户端将剪贴板中的内容复制到[目标主机]选项。\n"
-    
-    var cmdStrForSwing = ""
-        + "C: \n"
-        + "cd C:\FileDistributionClient\n"
-        + "set fdc_account="+userAccount+"\n"
-        + "set fdc_ip="+serverHost+"\n"
-        + "set fdc_port=22\n"
-        + "set fdc_target_path=~/\n"
-        + "set fdc_asset_cn_arr="+authorize_list+"\n";
-        + "set JAVA_OPTS=-client -Xms32M -Xmx128M -XX:PermSize=16M -XX:MaxPermSize=64M\n"
-        + "set fdc_base_dir=C:\\FileDistributionClient\\ \n";
-        + "set classpath=.;%fdc_base_dir%jre\\lib\\rt.jar;%fdc_base_dir%jsch-0.1.51.jar;%fdc_base_dir%log4j-api-2.1.jar;%fdc_base_dir%log4j-core-2.1.jar;%fdc_base_dir%FileDistributionClient.jar;\n";
-        + "set path=.;%fdc_base_dir%;%fdc_base_dir%jre\\bin\\;\n";
-        + "java %JAVA_OPTS% com.fortappend.SwingClient true %fdc_account% %fdc_ip% %fdc_port% %fdc_target_path% %fdc_asset_cn_arr%\n";
-        + "exit\n";
-    
-    if(confirm(confirmInfo)){
-        //alert("userAccount="+userAccount+"\nserverHost="+serverHost+"\nauthorize_list="+authorize_list);
-    	//window.clipboardData.setData("text",authorize_list);
-    	try{
-	        batActiveXObject.run("C:\\FileDistributionClient\\run.bat "+userAccount+" "+serverHost+" 22 ~/ "+authorize_list+" "+is64or32()+"\n",0);  
-    	}catch(ex){
-    	    alert("请确认是否已经正确安装文件批量上传客户端");
-    	}
-        //batActiveXObject.run(cmdStrForSwing, 0);
-    }
-    //var nameArr = "模拟环境.货币网/票据网.Linux.SMNYWEB2".split(".");
-    //for(var j = 0; j < nameArr.length; j++){
-    //  alert(nameArr[j]);
-    //}
-    //alert(treeObject);
-	}
-	
-	function dispalyTableRow(keyWord){
-	  var chks = document.getElementsByName("list_ckb");
-		for (var i = 0; i < chks.length; i++) {
-
-	    var tr = chks[i].parentNode.parentNode;
-			
-			if (tr == null) {
-				continue;
-			}
-			
-			var tds = tr.getElementsByTagName("td");
-			if (tds.length < 7) {
-				continue;
-			}
-			
-			var org = tds[2].innerHTML.replaceAll("&nbsp;", "");
-		  
-		  if(org.indexOf(keyWord) == 0){
-		    //alert(org);
-		  	tr.style.display=""
-		  }else{
-		  	tr.style.display="none"		    
-		  }
-		}
-	}
-	
-    function isOnPage(asset){
-        var chks = document.getElementsByName("list_ckb");
-        for (var i = 0; i < chks.length; i++) {
-
-        var tr = chks[i].parentNode.parentNode;
-            
-            if (tr == null) {
-                continue;
-            }
-            
-            var tds = tr.getElementsByTagName("td");
-            if (tds.length < 7) {
-                continue;
-            }
-            
-            var assetName = tds[3].innerHTML.replaceAll("&nbsp;", "");
-            var assetIp = tds[4].innerHTML.replaceAll("&nbsp;", "");
-            var assetAcc = tds[6].innerHTML.replaceAll("&nbsp;", "");
-            var styleDispaly = tr.style.display;
-            
-            if(
-	            assetName == asset[1] 
-	            && assetIp == asset[2] 
-	            && assetAcc == asset[3] 
-	            && (
-	                typeof(styleDispaly) == "undefined" 
-	                || styleDispaly ==""
-	            ) 
-            ){
-                return true;
-            }
-            
-        }
-        
-        return false;
-          
-      }
-	
-	function batch_sso_old() {
-		var chks = document.getElementsByName("list_ckb");
-		
-		for (var i = 0; i < chks.length; i++) {
-			if (!chks[i].checked) {
-				continue;
-			}
-			
-			var tr = chks[i].parentNode.parentNode;
-			
-			if (tr == null) {
-				continue;
-			}
-			
-			var tds = tr.getElementsByTagName("td");
-			if (tds.length < 7) {
-				continue;
-			}
-			
-			var seq = chks[i].value;
-			var rdn = chks[i].id;
-			var asset = tds[3].innerHTML.replaceAll("&nbsp;", "");
-			var aip = tds[4].innerHTML.replaceAll("&nbsp;", "");
-			var acc = tds[6].innerHTML.replaceAll("&nbsp;", "");
-		
-			scrt(seq, rdn, asset, aip, acc);
-			
-			sleep(1000);
-		}
-	
-	}
-	
-	function batch_sso(login_type) {
-	
-		var xmlHttp=new XmlHttpConstruct("/aim/portal.do");	
-		xmlHttp.send("method=batch_sso");
-		var rs=xmlHttp.resText();
-		//alert(rs);
-		if (rs == '') {
-			return;
-		}
-		
-		var data_line_ary = rs.split("\n");
-		
-		if(data_line_ary[0] != "SIMP_OK" ){
-			alert("返回数据格式错误\n数据头不完整\n{"+list_data_str+"}");
-			return null;		
-		}	
-		
-		if(data_line_ary.length < 2) {
-			alert("返回数据格式错误\n{"+list_data_str+"}");
-			return null;
-		}
-		
-		var login_type_delay = 0;
-		
-		for (var i = 1; i < data_line_ary.length - 1; i++) {
-			var line = data_line_ary[i];
-			var data = line.split(";");
-			
-			var seq = data[0];
-			var rdn = data[4];
-			var asset = data[1];
-			var aip = data[2];
-			var acc = data[3];
-			
-			if(isOnPage(data)){
-			    
-			}else{
-			    if(i == 1)login_type_delay = 1;
-			    continue;
-			}
-			
-			if (i == 1) {
-				scrt(login_type , seq, rdn, asset, aip, acc);
-			} else {
-			    if(login_type_delay > 0){
-			        scrt(login_type , seq, rdn, asset, aip, acc);
-			        login_type_delay = 0;
-			    }else{
-     				scrt("union", seq, rdn, asset, aip, acc);
-			    }
-			}
-			
-			//clear_chk(rdn);
-			
-			sleep(1000);
-		}
-		
-		//clear_chk("list_ckb_all");
-		clear_all_chk();
-	}
-	
-	function clear_chk(rdn) {
-		var obj = document.getElementById(rdn);
-		
-		if (obj == null) {
-			return;
-		}
-		
-		obj.checked = false;
-	}
-	
-	function clear_all_chk() {
-	
-		var obj = document.getElementsByTagName("INPUT");
-		for (var i = 0; i < obj.length; i++) {
-	
-			if ("checkbox" == obj[i].type) {
-				obj[i].checked = false;
-			}
-		}
-		
-	}
-	
-	function sleep(ms) {
-		var args = "method=sleep&ms="+ms;			
-		
-		var xmlHttp=new XmlHttpConstruct("/aim/sso.do");		
-		xmlHttp.send(args);		
-		return;
-	}
-	
-	function check_simp_eor(rs){
-		if(rs!=null && rs.indexOf("SIMP_EOR")!=-1) {
-			alert(rs);
-			return false;
-		}
-		
-		return true;
-	}
-	
-	function scrt(type, seq, rdn, asset, aip, account){
-		var fort_ip=getSSOFortIp();
-		if (fort_ip == null) {
-			return;
-		}
-		
-		var args = "method=login&aip="+aip+"&rdn="+rdn+"&seq="+seq;			
-		var protocol = "ssh";
-		if (protocol == null) {
-			return;
-		}
-		
-		args+="&type=cmd&protocol="+protocol+"&fort_ip="+fort_ip;
-		
-		var xmlHttp=new XmlHttpConstruct("/aim/sso.do");		
-		xmlHttp.send(args);		
-		var rs=xmlHttp.resText();
-		
-		if(!check_simp_eor(rs)){
-			return ;
-       	}
-		
-		var title=asset+"("+aip+")->"+account;
-				
-		try{
-			if (type == 'single') {
-				sso.scrt("ssh2", fort_ip, "22", "user", rs, title);
-			} else {
-				sso.scrt_t("ssh2", fort_ip, "22", "user", rs, title);
-			}
-		} catch(err) {
-			alert("您所使用的SecureCRT版本不支持以选项卡方式打开");
-		}
-		
-	}
-	
-	
-</script>
 </head>
 <OBJECT ID="sso" WIDTH="0" HEIGHT="0" CLASSID="CLSID:24633CC3-641F-46E8-844E-52545262BEF2" >
 </OBJECT>
-<body style="overflow: hidden">
-	
-	
-	
-<div id="resourceTree" class="menu-div" style="overflow:auto;background-color:#f5f5f5;border:1px solid Silver;">
-  <div id="treeboxbox_tree" style="background-color:#f5f5f5;border:0px solid Silver;overflow:auto;"></div>	
-</div>
-
-<script LANGUAGE="JavaScript">
-
-  var treeObject = new TreeClass({
-    targetDivId:"treeboxbox_tree",
-    iconImagePath:"<simp:PathTag s='/dhtmlxTree/codebase/imgs/'/>",
-    onNodeSelect : function(selNodeId){
-    	clear_all_chk();
-      dispalyTableRow(selNodeId);
-    }
-  });
-  //treeObject.loadTree(["a.aa.aaa","a.aa.aab","a.aa.aac","b.bb.bbc","b.bb.bbc.bbc.b.c.e.f"]);
-
-</script>
-
+<body>
 <div id="main_container">
 <table border=0 cellpadding="0" cellspacing="0" class="layout-table">
 	<form name="list_form" method="post">
@@ -581,7 +23,7 @@ function itilAuthJudge(ip, resAccount){
 				<table border=0 cellpadding="0" cellspacing="0" class="tab">
 					<tr> 
 						<td width="25px" align="center"><img width="16" height="16" src="/public/img/body/yuan_list.png"/></td>
-						<td width=100><B class="path-font">[收藏夹列表]</B></td>   
+						<td width=100><B class="path-font">[授权列表]</B></td>   
 						<td class="pages-align" align="right">
 							<table cellspacing="0" cellpadding="0">
 								<tr id="list_query">
@@ -598,21 +40,6 @@ function itilAuthJudge(ip, resAccount){
 			<div class="div">
 			<table cellpadding="0" cellspacing="0" class="tab" >			
 				<tr>
-					<td class="font2-td">
-						<input type="button" value="删除" class="tab-button 18x18-button delete-img" onclick="del(this)"/>
-					</td>
-					<td class="font4-td">
-						<img class="split-img" src="/public/img/body/split.png"/>
-						<input type="button" value="批量登录▼" class="tab-button 18x18-button batch-login-shell-img" onclick="menu_div(this,'sso_div','200','70')"/>
-					</td>
-					<td class="font4-td">
-						<img class="split-img" src="/public/img/body/split.png"/>
-						<input type="button" value="批量上传"  class="tab-button 18x18-button batch-login-shell-img" onclick="copy_batchupload_link()"/>
-					</td>
-					<td class="font4-td">
-						<img class="split-img" src="/public/img/body/split.png"/>
-						<input type="button" value="筛选"  class="tab-button 18x18-button batch-login-shell-img" onclick="menu_div(this,'resourceTree','230','300')"/>
-					</td>
 					<td class="pages-align" id="list_act">						
 					</td>	
 					<td class="pages-align" align="right">
@@ -653,6 +80,7 @@ function itilAuthJudge(ip, resAccount){
 					<td>
 						<div style="height: 100%;width: 100%;border: 0;overflow-y:scroll;overflow-x:hidden; ">
 							<table cellpadding="0" cellspacing="0" width="100%" id="list_data">
+														
 							</table>
 						</div>
 					</td>
@@ -701,6 +129,7 @@ function itilAuthJudge(ip, resAccount){
 </div>
 </body>
 </html>
+
 <!------------------------------------下拉框基础类 模板 ------------------------------------------------------>
 <div id="select_box_template" class="menu-div" style="width: 170px;height: 90px" onMouseOver="this.style.display='block'" onMouseOut="this.style.display='none'">
 <form method="post" name="select_box_form">		
@@ -808,6 +237,25 @@ function itilAuthJudge(ip, resAccount){
 		this.template=main_container;
 		
 		//------------list html 初始化区 beg
+		/*
+		this.add_query_item=function(tr,item){
+			var td=tr.insertCell();
+			td.innerHTML="&nbsp;&nbsp;"+item.title+"：&nbsp;";			
+			
+			td=tr.insertCell();
+		
+			if(item.type=="select"){
+				td.innerHTML=this.get_select_tag(item);
+			}else if(item.type=="input"){
+				var html="<input name='"+item.name+"' onkeyup='" + this.id+ ".on_key_search(this)' ";
+				if(item.size!=null){
+					html+="size='"+item.size+"'";
+				}
+				html+="/>";
+				td.innerHTML=html;
+			}
+		}
+		*/
 		
 		this.add_query_item=function(tr,item){
 			if(item.type=="select"){
@@ -1130,9 +578,8 @@ function itilAuthJudge(ip, resAccount){
 		}	
 		
 		this.insert_rows=function (list_data_tab,data_line_ary,startIndex){
-			var orgArr = new Array();
+			
 			for(var i=startIndex;i<data_line_ary.length;i++){
-				
 				//alert(data_line_ary[i]);
 				this.debug_data_line(data_line_ary[i]);
 				var cell_data_ary=data_line_ary[i].split(";");			
@@ -1144,10 +591,7 @@ function itilAuthJudge(ip, resAccount){
 					this.style.backgroundColor= "#ffffff";
 				};				
 				this.insert_cells(row,cell_data_ary);	
-				orgArr.push(cell_data_ary[10]);
 			}			
-			//alert(orgArr);
-			treeObject.loadTree(orgArr);
 		}		
 		
 		
@@ -1231,10 +675,9 @@ function itilAuthJudge(ip, resAccount){
 	
 		this.id=id;		
 		
-	    var chekBoxHtml = '<input type="checkbox" onclick=\'List_checkAll(this,"/aim/backGrand.do")\' name="list_ckb_all" type="checkbox" id="list_ckb_all"/>' ;		
+					
 		this.head_info=[
-			{title:chekBoxHtml,width:40}
-			,{title:"标号",width:40}
+			{title:"标号",width:40}
 			,{title:"归&nbsp;属"}
 			,{title:"资源名称"}
 			,{title:"地&nbsp;址",width:120}
@@ -1247,7 +690,7 @@ function itilAuthJudge(ip, resAccount){
 		];
 		
 		this.get_list_type=function(){
-			return "favorite_main";
+			return "acc_main";
 		}
 		
 		this.get_query_url=function(){
@@ -1258,20 +701,9 @@ function itilAuthJudge(ip, resAccount){
 		this.get_query_method=function(){
 			return "query";
 		}
-		this.checkhtml = function (arg){
-			var chk = "";
-			
-			if (arg.chked == 'checked=true') {
-				chk = "checked";
-			}
-			
-			var listcheckBoxHtml = '<input '+chk+' type="checkbox" name="list_ckb" onclick=\'List_check(this,"/aim/backGrand.do")\' value="'+arg.seq+'" type="checkbox" id="'+arg.rdn+'"/>' ;
-			
-			return listcheckBoxHtml;
-		};
+		
 		this.insert_cells=function (row,cell_data_ary){
 			//alert(cell_data_ary);
-					
 			var arg ={
 				i:cell_data_ary[0],
 				atype:cell_data_ary[1],
@@ -1282,36 +714,20 @@ function itilAuthJudge(ip, resAccount){
 				seq:cell_data_ary[6],
 				rdn:cell_data_ary[8],
 				protocol:cell_data_ary[9],
-				org:cell_data_ary[10],
-				chked:cell_data_ary[11]
+				org:cell_data_ary[10]
 			};
 			
 			var issuer=select_tag_issuer(arg.issuer,"issuer_ip_select");
-			var checkb = this.checkhtml(arg);
 					
-			this.add_cell(row,this.head_info[0],checkb);	
-			this.add_cell(row,this.head_info[1],arg.i);	
-			this.add_cell(row,this.head_info[2],space(2)+arg.org,"left", true);			
-			this.add_cell(row,this.head_info[3],space(2)+arg.aname,"left", true);			
-			this.add_cell(row,this.head_info[4],arg.aip);
-			this.add_cell(row,this.head_info[5],issuer);			
-			this.add_cell(row,this.head_info[6],space(2)+arg.account,"left");			
-			
-			
-	         if("undefined" == typeof itilAuthJudge){//alert(1);
-                 this.add_cell(row,this.head_info[7],space(2)+this.get_action(arg),"left");      
-                 this.add_cell(row,this.head_info[8],space(2)+this.tools_action(arg),"left");            
-	         }else{//alert(2);
-	             if(itilAuthJudge(arg.aip, arg.account) == true){//alert(3);
-	                 this.add_cell(row,this.head_info[7],space(2)+this.get_action(arg),"left");      
-	                 this.add_cell(row,this.head_info[8],space(2)+this.tools_action(arg),"left");            
-	             }else{//alert(4);
-                     this.add_cell(row,this.head_info[7],space(2),"left");      
-                     this.add_cell(row,this.head_info[8],space(2),"left");            
-	             }
-	         }
-			
-			this.add_cell(row,this.head_info[9],space(2)+this.logs_action(arg),"left");		
+			this.add_cell(row,this.head_info[0],arg.i);	
+			this.add_cell(row,this.head_info[1],space(2)+arg.org,"left", true);			
+			this.add_cell(row,this.head_info[2],space(2)+arg.aname,"left", true);			
+			this.add_cell(row,this.head_info[3],arg.aip);
+			this.add_cell(row,this.head_info[4],issuer);			
+			this.add_cell(row,this.head_info[5],space(2)+arg.account,"left");			
+			this.add_cell(row,this.head_info[6],space(2)+this.get_action(arg),"left");		
+			this.add_cell(row,this.head_info[7],space(2)+this.tools_action(arg),"left");			
+			this.add_cell(row,this.head_info[8],space(2)+this.logs_action(arg),"left");		
 			
 		}	
 				
@@ -1319,8 +735,8 @@ function itilAuthJudge(ip, resAccount){
 	
 	var main_res_acc_list = new Main_Res_Auth_AccListCls("main_res_acc_list");
 	
-	main_res_acc_list.ini(99);  
-  
+	main_res_acc_list.ini(20);
+
 </script>
 
 <div  id="pop_content" class="pop-up-div" onMouseOver="this.style.display='block'" >
@@ -1391,37 +807,3 @@ function itilAuthJudge(ip, resAccount){
 		xmlHttp.send("method=login_close");	
 	}
 </script>
-<div id="sso_div" class="menu-div">
-<table cellpadding="0" cellspacing="0" class="menu-table">
-	<form method="post" name="addForm">		
-		<tr class="menu-table-top-tr">
-			<td class="menu-table-top-tr-td1" style=""><div></div></td>
-			<td class="menu-table-top-tr-td2"><div></div></td>
-			<td width="10px" class="menu-table-top-tr-td2"><div></div></td>
-			<td class="menu-table-top-tr-td3"><div></div></td>
-		</tr>
-		<tr>
-			<td class="menu-table-center-tr-td1">&nbsp;</td>
-			<td valign="top">
-				<table class="menu-list-table" cellpadding="0" cellspacing="0">
-					<tr onMouseMove="menuTrMouseMove(this)" onMouseOut="menuTrMouserOut(this)" onClick="batch_sso('single')">
-						<td class="menu-sborder"><img src="/public/img/sso/batch_shell_16.png"/></td>
-						<td >&nbsp;&nbsp;独立选项卡</td>
-					</tr>
-					<tr onMouseMove="menuTrMouseMove(this)" onMouseOut="menuTrMouserOut(this)" onClick="batch_sso('union')">
-						<td class="menu-sborder">&nbsp;</td>
-						<td >&nbsp;&nbsp;已有选项卡</td>
-					</tr>
-				</table>
-			</td>
-			<td width="10px">&nbsp;</td>
-			<td class="menu-table-center-tr-td3">&nbsp;</td>
-		</tr>
-		<tr class="menu-table-bottom-tr">
-			<td class="menu-table-bottom-tr-td1"><div></div></td>
-			<td class="menu-table-bottom-tr-td2" colspan="2"><div></div></td>
-			<td class="menu-table-bottom-tr-td3"><div></div></td>
-		</tr>
-	</form>
-</table>
-</div>

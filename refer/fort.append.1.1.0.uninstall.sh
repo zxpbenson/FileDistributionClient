@@ -9,29 +9,21 @@ if [ ! -d "/usr/local/fort_append" ]; then
   exit
 fi
 
-#sed -i 's/StartFortService//g' /usr/local/tomcat/bin/startup.sh
-#mv /usr/local/fort_append/backup/startup.sh /usr/local/tomcat/bin/startup.sh
-#mv /usr/local/fort_append/backup/catalina.sh /usr/local/tomcat/bin/catalina.sh
-
-# *** uninstall rccron auto start StartFortService ***
 service FortServiceServer stop
 update-rc.d FortServiceServer stop
-#StopFortService
 
 rm -rf /bin/FortService
-#rm -rf /bin/StartFortService
-#rm -rf /bin/StopFortService
 rm -rf /etc/init.d/FortServiceServer
 
 rm -rf /usr/local/tomcat/webapps/aim/dhtmlxTree
-
-mv /usr/local/fort_append/backup/list_account.jsp /usr/local/tomcat/webapps/aim/asset/
-
-mv /usr/local/fort_append/backup/favorites.jsp /usr/local/tomcat/webapps/aim/framePages/sso/
-
 rm -rf /usr/local/tomcat/webapps/public/download/FileDistributionClient.1.0.1.zip
 
-mv /usr/local/fort_append/backup/download.jsp /usr/local/tomcat/webapps/public/download/
+mv /usr/local/fort_append/backup/list_account.jsp       /usr/local/tomcat/webapps/aim/asset/
+mv /usr/local/fort_append/backup/favorites.jsp          /usr/local/tomcat/webapps/aim/framePages/sso/
+mv /usr/local/fort_append/backup/download.jsp           /usr/local/tomcat/webapps/public/download/
+mv /usr/local/fort_append/backup/res_auth_list.jsp      /usr/local/tomcat/webapps/aim/framePages/sso/
+mv /usr/local/fort_append/backup/tab_view.jsp           /usr/local/tomcat/webapps/aim/framePages/sso/
+mv /usr/local/fort_append/backup/portal_list_res_acc.js /usr/local/tomcat/webapps/public/framePages/sso/
 
 if [ -d "/root/fort.append.1.1.0" ]; then
   rm -rf /root/fort.append.1.1.0
@@ -43,7 +35,7 @@ if [ -z $TomcatPID ] ; then
   echo "Tomcat process not exists."
 else
   kill $TomcatPID
-  echo "Tomcat process stop successfully."
+  echo "Tomcat process stop successfully. pid=$TomcatPID"
 fi
 
 if [ -d "/usr/local/tomcat/work/Catalina" ]; then
@@ -51,7 +43,7 @@ if [ -d "/usr/local/tomcat/work/Catalina" ]; then
   echo "Clean Tomcat cache successfully."
 fi
 
-/usr/local/tomcat/bin/startup.sh
+sh /usr/local/tomcat/bin/startup.sh
 echo "Tomcat restart successfully."
 
 rm -rf /usr/local/fort_append

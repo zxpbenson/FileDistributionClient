@@ -15,8 +15,6 @@
 <%@ page import="java.io.OutputStreamWriter"%>
 <%@ page import="java.net.Socket"%>
 <%@ page import="java.net.UnknownHostException"%>
-<%@ page import="java.util.concurrent.Executor"%>
-<%@ page import="java.util.concurrent.Executors"%>
 <%//@ page import="java.util.concurrent.atomic.AtomicLong"%>
 
 <%!
