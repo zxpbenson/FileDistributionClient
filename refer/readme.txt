@@ -103,8 +103,7 @@ nohup ./fort.append.1.1.0.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
 ------------------------------------------------------------------------------
 
 1，文件批量上传不受Itil限制
-2，记得添加链接 ln -s $JAVA_HOME /usr/local/jdk6
-3，Itil过滤配置文件位置 /usr/local/fort_append/conf/itil.control.cnf
+2，Itil过滤配置文件位置 /usr/local/fort_append/conf/itil.control.cnf
 修改配置文件后重启服务
 service FortServiceServer stop
 service FortServiceServer start

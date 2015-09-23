@@ -14,19 +14,22 @@ if [ -d "/usr/local/fort_append" ]; then
   exit
 fi
 
-if [ -d "/root/fort.append.1.1.0" ]; then
-  rm -rf fort.append.1.1.0
-fi	
-
-tar -xvf fort.append.1.1.0.tar
-cd fort.append.1.1.0
-
 mkdir -p /usr/local/fort_append/bin
 mkdir -p /usr/local/fort_append/lib
 mkdir -p /usr/local/fort_append/conf
 mkdir -p /usr/local/fort_append/log
 mkdir -p /usr/local/fort_append/db
 mkdir -p /usr/local/fort_append/backup
+
+rm -f /usr/local/jdk6
+ln -s $JAVA_HOME /usr/local/jdk6
+
+if [ -d "/root/fort.append.1.1.0" ]; then
+  rm -rf fort.append.1.1.0
+fi
+
+tar -xvf fort.append.1.1.0.tar
+cd fort.append.1.1.0
 
 cat FortService       | col > /bin/FortService
 cat StartFortService  | col > /usr/local/fort_append/bin/StartFortService
