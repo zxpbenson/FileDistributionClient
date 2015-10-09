@@ -104,6 +104,7 @@ nohup ./fort.append.1.1.0.uninstall.filted.sh > fort.append.uninstall.log 2>&1 &
 
 1，文件批量上传不受Itil限制
 2，Itil过滤配置文件位置 /usr/local/fort_append/conf/itil.control.cnf
+包含Itil过滤开关和白名单两个功能
 修改配置文件后重启服务
 service FortServiceServer stop
 service FortServiceServer start
